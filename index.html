@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakula Puntik - Beranda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Kelas Animasi Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Utility untuk Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-gray-700">
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-100/50 rounded-full blur-3xl -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-100/50 rounded-full blur-3xl -z-10"></div>
+
+    <nav class="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
+                    <span class="font-black text-gray-800 tracking-tight text-lg uppercase">Bakula Puntik</span>
+                </div>
+
+                <div id="auth-container">
+                    <a href="login.html" id="btn-login"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-200 transition-all active:scale-95">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Masuk
+                    </a>
+
+                    <div id="user-profile"
+                        class="hidden flex items-center gap-3 border-l border-gray-200 pl-4 h-8 relative">
+                        <div class="text-right hidden sm:block">
+                            <p id="display-username" class="text-xs font-bold text-gray-800 leading-tight">Hai, User</p>
+                            <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Warga Desa</p>
+                        </div>
+                        <button onclick="toggleUserMenu()"
+                            class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">
+                            <i class="fa-solid fa-user"></i>
+                        </button>
+                        <div id="userMenu"
+                            class="hidden absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                            <button onclick="logout()"
+                                class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-3 font-bold transition-colors">
+                                <i class="fa-solid fa-power-off"></i> Keluar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="flex items-center justify-center pt-24 pb-16 px-6 text-center z-10 reveal">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-800 mb-6 leading-tight tracking-tight">
+                Portal Informasi <br> <span
+                    class="text-blue-600 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Desa
+                    Puntik Luar</span>
+            </h1>
+            <p class="text-gray-500 font-medium mb-8 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
+                Sistem informasi dan manajemen kependudukan terpadu. Memberikan akses data yang transparan, akurat, dan
+                pelayanan yang lebih efisien bagi seluruh warga desa.
+            </p>
+            <a href="#profil-desa"
+                class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-lg text-blue-600 animate-bounce border border-blue-50">
+                <i class="fa-solid fa-arrow-down"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-24 z-10" id="profil-desa">
+
+        <section class="reveal">
+            <div class="text-center mb-10">
+                <h2 class="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Bagian 01</h2>
+                <h3 class="text-2xl md:text-3xl font-black text-gray-800">Identitas & Wilayah</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 glass-card p-8 rounded-[2rem]">
+                    <h4 class="text-lg font-black text-gray-800 mb-6 border-b pb-4">Profil Singkat</h4>
+                    <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nama Desa</p>
+                            <p class="text-sm font-bold text-gray-800">Puntik Luar</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kode Pos</p>
+                            <p class="text-sm font-bold text-gray-800">70563</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Luas Wilayah</p>
+                            <p class="text-sm font-bold text-gray-800">± 1.250 Hektar</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jumlah Penduduk</p>
+                            <p class="text-sm font-bold text-blue-600">1.284 Jiwa</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Sejarah
+                                Singkat</p>
+                            <p class="text-xs md:text-sm text-gray-600 leading-relaxed text-justify">
+                                Desa Puntik Luar berdiri sebagai kawasan pemukiman agraris yang berkembang berkat sistem
+                                gotong royong warganya. Berawal dari sekelompok kecil petani yang mendiami bantaran
+                                sungai, desa ini perlahan mekar menjadi pusat kegiatan sosial masyarakat yang harmonis
+                                dan menjunjung tinggi nilai-nilai tradisi Banjar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-card p-8 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-200">
+                    <h4 class="text-lg font-black mb-8 border-b border-blue-400/30 pb-4">Batas Wilayah</h4>
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-xs font-bold">
+                                U</div>
+                            <div>
+                                <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Utara</p>
+                                <p class="text-sm font-bold">Desa Puntik Tengah</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-xs font-bold">
+                                S</div>
+                            <div>
+                                <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Selatan</p>
+                                <p class="text-sm font-bold">Sungai Barito</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-xs font-bold">
+                                T</div>
+                            <div>
+                                <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Timur</p>
+                                <p class="text-sm font-bold">Desa Berangas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-xs font-bold">
+                                B</div>
+                            <div>
+                                <p class="text-[10px] text-blue-200 uppercase tracking-widest font-bold">Barat</p>
+                                <p class="text-sm font-bold">Kecamatan Belawang</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="text-center mb-10">
+                <h2 class="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Bagian 02</h2>
+                <h3 class="text-2xl md:text-3xl font-black text-gray-800">Komposisi Demografis</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-8 rounded-[2rem]">
+                    <h4 class="text-sm font-black text-gray-800 mb-6 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-venus-mars text-blue-500"></i> Jenis Kelamin</h4>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-600">Laki-laki (51%)</span>
+                        <span class="text-xs font-bold text-gray-600">Perempuan (49%)</span>
+                    </div>
+                    <div class="w-full h-4 bg-pink-400 rounded-full overflow-hidden flex">
+                        <div class="h-full bg-blue-600" style="width: 51%;"></div>
+                    </div>
+
+                    <h4
+                        class="text-sm font-black text-gray-800 mb-4 mt-10 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple text-blue-500"></i> Kelompok Usia</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Usia
+                                    Produktif (15-64 th)</span><span>65%</span></div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full">
+                                <div class="h-full bg-indigo-500 rounded-full" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Anak-anak
+                                    (0-14 th)</span><span>25%</span></div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full">
+                                <div class="h-full bg-indigo-400 rounded-full" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Lansia (>65
+                                    th)</span><span>10%</span></div>
+                            <div class="w-full h-2 bg-gray-100 rounded-full">
+                                <div class="h-full bg-indigo-300 rounded-full" style="width: 10%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-[2rem]">
+                    <h4 class="text-sm font-black text-gray-800 mb-4 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-500"></i> Pendidikan Tertinggi</h4>
+                    <div class="flex flex-wrap gap-2 mb-10">
+                        <span
+                            class="px-3 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-lg border border-blue-100">SD/Sederajat:
+                            35%</span>
+                        <span
+                            class="px-3 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-lg border border-blue-100">SMP/Sederajat:
+                            30%</span>
+                        <span
+                            class="px-3 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-lg border border-blue-100">SMA/SMK:
+                            25%</span>
+                        <span
+                            class="px-3 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-lg border border-blue-100">Perguruan
+                            Tinggi: 10%</span>
+                    </div>
+
+                    <h4 class="text-sm font-black text-gray-800 mb-4 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-briefcase text-blue-500"></i> Sektor Pekerjaan</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-seedling"></i></div>
+                            <div class="flex-grow">
+                                <p class="text-xs font-bold text-gray-700">Pertanian & Perkebunan</p>
+                                <p class="text-[10px] text-gray-400">Sektor mayoritas warga</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-store"></i></div>
+                            <div class="flex-grow">
+                                <p class="text-xs font-bold text-gray-700">Perdagangan / UMKM</p>
+                                <p class="text-[10px] text-gray-400">Mendominasi area jalan utama</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-industry"></i></div>
+                            <div class="flex-grow">
+                                <p class="text-xs font-bold text-gray-700">Buruh & Karyawan Swasta</p>
+                                <p class="text-[10px] text-gray-400">Pekerja pabrik dan instansi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+                <div>
+                    <h2 class="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Bagian 03</h2>
+                    <h3 class="text-2xl font-black text-gray-800 mb-6">Sosial & Budaya</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-5 rounded-2xl">
+                            <i class="fa-solid fa-mosque text-2xl text-emerald-500 mb-3"></i>
+                            <h4 class="text-xs font-black text-gray-800 mb-1">Agama Mayoritas</h4>
+                            <p class="text-[10px] text-gray-500 font-medium">100% Islam</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-2xl">
+                            <i class="fa-solid fa-comments text-2xl text-blue-500 mb-3"></i>
+                            <h4 class="text-xs font-black text-gray-800 mb-1">Bahasa Daerah</h4>
+                            <p class="text-[10px] text-gray-500 font-medium">Bahasa Banjar</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-2xl">
+                            <i class="fa-solid fa-handshake-angle text-2xl text-indigo-500 mb-3"></i>
+                            <h4 class="text-xs font-black text-gray-800 mb-1">Lembaga Sosial</h4>
+                            <p class="text-[10px] text-gray-500 font-medium">PKK, Karang Taruna, Posyandu</p>
+                        </div>
+                        <div class="glass-card p-5 rounded-2xl">
+                            <i class="fa-solid fa-users-rays text-2xl text-amber-500 mb-3"></i>
+                            <h4 class="text-xs font-black text-gray-800 mb-1">Organisasi</h4>
+                            <p class="text-[10px] text-gray-500 font-medium">Kelompok Tani, BUMDes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Bagian 04</h2>
+                    <h3 class="text-2xl font-black text-gray-800 mb-6">Fasilitas Sarana</h3>
+                    <div class="space-y-4">
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-school"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-black text-gray-800">Fasilitas Pendidikan</h4>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">1 TK/PAUD,
+                                        1 SD Negeri</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-house-medical"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-black text-gray-800">Fasilitas Kesehatan</h4>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">1
+                                        Poskesdes, 2 Posyandu</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-kaaba"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-black text-gray-800">Fasilitas Ibadah</h4>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">1 Masjid, 4
+                                        Mushola/Langgar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full bg-white border-t border-gray-100 py-6 text-center z-10 mt-auto">
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+            &copy; 2026 Pemerintah Desa Puntik Luar
+        </p>
+    </footer>
+
+    <script>
+        // Logika Animasi Scroll Reveal (Sangat Ringan)
+        document.addEventListener('DOMContentLoaded', function () {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 }); // Trigger saat 10% elemen terlihat
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+
+            // Logika Cek Status Login
+            checkLoginStatus();
+        });
+
+        // Toggle User Menu Dropdown
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Cek LocalStorage untuk ubah tombol login menjadi profil
+        function checkLoginStatus() {
+            // Mengambil data sesi (yang diset di login/register)
+            const role = localStorage.getItem('userRole');
+            const username = localStorage.getItem('username');
+
+            if (role === 'USER' && username) {
+                // Sembunyikan tombol login, tampilkan profil user
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('user-profile').classList.add('flex');
+
+                // Ubah nama berdasarkan username yang login
+                document.getElementById('display-username').innerText = 'Hai, ' + username;
+            }
+        }
+
+        // Fungsi Logout
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                // Hapus data sesi
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+
+                // Reload halaman untuk mereset tampilan
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+
+</html>

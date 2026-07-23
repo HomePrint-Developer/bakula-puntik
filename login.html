@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bakula Puntik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        .login-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .animate-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-height: 600px) {
+            body {
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 h-screen flex items-center justify-center p-4 relative">
+    <div class="absolute top-[-10%] left-[-10%] w-[35%] h-[35%] bg-blue-200/50 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[35%] h-[35%] bg-indigo-200/50 rounded-full blur-3xl"></div>
+
+    <div class="w-full max-w-md animate-up z-10">
+        <div class="text-center mb-6 flex flex-col items-center">
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-5xl mb-3 drop-shadow-sm"></i>
+            <h1 class="text-xl font-black text-gray-800 tracking-tight uppercase">Bakula Puntik</h1>
+            <p class="text-xs font-medium text-gray-500 mt-1">Sistem Manajemen Kependudukan</p>
+        </div>
+
+        <div class="login-card p-8 rounded-[2.5rem] shadow-2xl shadow-blue-200/50 border border-white">
+            <form id="login-form" autocomplete="off" class="space-y-4">
+
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-bold text-gray-400 uppercase tracking-widest ml-4">Username</label>
+                    <div class="relative group">
+                        <i
+                            class="fa-solid fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-600 transition-colors text-xs"></i>
+                        <input type="text" id="input-username" required placeholder="Masukkan username"
+                            class="w-full pl-12 pr-6 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl text-xs focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none transition-all font-semibold text-gray-700">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-bold text-gray-400 uppercase tracking-widest ml-4">Kata Sandi</label>
+                    <div class="relative group">
+                        <i
+                            class="fa-solid fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-600 transition-colors text-xs"></i>
+                        <input type="password" id="input-password" required placeholder="••••••••"
+                            class="w-full pl-12 pr-6 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl text-xs focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none transition-all font-semibold text-gray-700">
+                    </div>
+                </div>
+
+                <div id="error-container"
+                    class="bg-red-50 border border-red-100 text-red-600 px-4 py-2.5 rounded-xl text-[10px] font-bold flex items-center gap-2 transition-all hidden">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="error-message"></span>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btn-submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                        Masuk
+                    </button>
+                </div>
+            </form>
+
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-gray-100"></span>
+                </div>
+                <div class="relative flex justify-center text-[9px] uppercase font-bold text-gray-300"><span
+                        class="bg-white px-4 tracking-widest">Atau</span></div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-xs text-gray-400 font-medium">
+                    Belum memiliki akun?
+                    <a href="register.html"
+                        class="text-blue-600 font-bold hover:underline decoration-2 underline-offset-4 transition-all">Registrasi
+                        Akun</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
+            authDomain: "bakula-puntik.firebaseapp.com",
+            databaseURL: "https://bakula-puntik-default-rtdb.firebaseio.com",
+            projectId: "bakula-puntik",
+            storageBucket: "bakula-puntik.firebasestorage.app",
+            messagingSenderId: "364750456093",
+            appId: "1:364750456093:web:751d5ebd6cc045b0d28df4",
+            measurementId: "G-V1BF0S7J2D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('login-form');
+            const inputUsername = document.getElementById('input-username');
+            const inputPassword = document.getElementById('input-password');
+            const btnSubmit = document.getElementById('btn-submit');
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+
+            function showError(msg) {
+                errorMessage.textContent = msg;
+                errorContainer.classList.remove('hidden');
+                btnSubmit.disabled = false;
+            }
+
+            inputPassword.addEventListener('input', () => {
+                if (inputPassword.value.length > 0 && inputPassword.value.length < 8) {
+                    showError("Kata Sandi minimal 8 karakter.");
+                } else {
+                    errorContainer.classList.add('hidden');
+                }
+            });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (inputPassword.value.length < 8) return;
+
+                const usernameVal = inputUsername.value.trim();
+                const passwordVal = inputPassword.value;
+                btnSubmit.disabled = true;
+
+                const usersRef = ref(db, 'users');
+                const userQuery = query(usersRef, orderByChild('username'), equalTo(usernameVal));
+
+                get(userQuery).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let isPasswordMatch = false;
+                        let userRole = "USER"; // Default jika data role belum ada di database
+
+                        snapshot.forEach((childSnapshot) => {
+                            const userData = childSnapshot.val();
+                            if (userData.password === passwordVal) {
+                                isPasswordMatch = true;
+                                if (userData.role) {
+                                    userRole = userData.role;
+                                }
+                            }
+                        });
+
+                        if (isPasswordMatch) {
+                            // Pengecekan ROLE dilakukan di sini
+                            if (userRole === "ADMIN") {
+                                window.location.href = 'index-admin.html';
+                            } else {
+                                window.location.href = 'index.html';
+                            }
+                        } else {
+                            showError("Kata sandi yang Anda masukkan salah.");
+                        }
+                    } else {
+                        showError("Username tidak ditemukan dalam sistem.");
+                    }
+                }).catch((error) => {
+                    showError("Terjadi kesalahan koneksi ke database.");
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

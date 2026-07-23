@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Bakula Puntik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link.active {
+            color: #2563eb;
+            /* blue-600 */
+            font-weight: 800;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        .nav-link {
+            color: #64748b;
+            /* slate-500 */
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header
+        class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-50 h-16 px-4 md:px-8 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
+            <span class="font-black text-lg text-gray-800 tracking-tight uppercase hidden sm:block">BAKULA PUNTIK</span>
+        </div>
+
+        <div class="flex items-center gap-6 h-full">
+            <nav class="hidden md:flex h-full items-center gap-6 mr-4">
+                <a href="#" class="nav-link active h-full flex items-center px-2">Dashboard</a>
+                <a href="#" class="nav-link h-full flex items-center px-2">Manajemen Kependudukan</a>
+            </nav>
+
+            <div class="flex items-center gap-3 border-l border-gray-200 pl-6 h-8">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
+                    <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
+                </div>
+                <div class="relative">
+                    <button onclick="toggleUserMenu()"
+                        class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">
+                        AD
+                    </button>
+                    <div id="userMenu"
+                        class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in">
+                        <div class="px-4 py-2 border-b border-gray-50 mb-1 sm:hidden">
+                            <p class="text-xs font-bold text-gray-800 truncate">Hai, Admin</p>
+                        </div>
+                        <a href="index-admin.html"
+                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Dashboard</a>
+                        <a href="index-manajemen.html"
+                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Manajemen
+                            Penduduk</a>
+                        <hr class="my-1 border-gray-100 md:hidden">
+                        <button onclick="logout()"
+                            class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-3 font-bold transition-colors">
+                            <i class="fa-solid fa-power-off"></i> Keluar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 px-4 md:px-8 pb-12 max-w-7xl mx-auto animate-fade-in">
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-black text-gray-800 tracking-tight">Dashboard Statistik</h1>
+            <p class="text-sm text-gray-500 font-medium mt-1">Ringkasan data kependudukan Desa Puntik Luar</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-map-location-dot text-2xl text-blue-600"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Jumlah RT Terdata</p>
+                    <p class="text-3xl font-black text-gray-800">12</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-layer-group text-2xl text-indigo-600"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Jumlah RW Terdata</p>
+                    <p class="text-3xl font-black text-gray-800">4</p>
+                </div>
+            </div>
+
+            <div class="bg-blue-600 p-6 rounded-[2rem] shadow-lg shadow-blue-200 flex items-center gap-5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-users text-2xl text-white"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-blue-100 font-bold tracking-widest uppercase mb-1">Total Penduduk</p>
+                    <p class="text-3xl font-black text-white">1.284</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
+            <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black text-gray-800 mb-6">Distribusi Usia Penduduk</h3>
+                <div class="h-[250px]">
+                    <canvas id="chartUsia"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black text-gray-800 mb-6">Persentase Jenis Kelamin</h3>
+                <div class="h-[250px] flex justify-center">
+                    <canvas id="chartGender"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black text-gray-800 mb-6">Tingkat Pendidikan</h3>
+                <div class="h-[250px]">
+                    <canvas id="chartPendidikan"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black text-gray-800 mb-6">Jenis Pekerjaan Utama</h3>
+                <div class="h-[250px]">
+                    <canvas id="chartPekerjaan"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Toggle Dropdown Profil
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('hidden');
+        }
+
+        // Fungsi Keluar / Logout
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // --- Konfigurasi Chart.js ---
+        document.addEventListener('DOMContentLoaded', function () {
+            // Global Styling ChartJS
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            Chart.defaults.color = '#94a3b8';
+
+            // 1. Histogram Usia
+            new Chart(document.getElementById('chartUsia'), {
+                type: 'bar',
+                data: {
+                    labels: ['0-14', '15-24', '25-34', '35-44', '45-54', '55+'],
+                    datasets: [{
+                        label: 'Jumlah Penduduk',
+                        data: [240, 180, 310, 250, 190, 114],
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Pie Chart Jenis Kelamin
+            new Chart(document.getElementById('chartGender'), {
+                type: 'pie', // Diubah menjadi pie
+                data: {
+                    labels: ['Laki-laki', 'Perempuan'],
+                    datasets: [{
+                        data: [650, 634],
+                        backgroundColor: ['#2563eb', '#f472b6'], // Biru dan Merah Muda
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    // cutout: '70%' dihapus agar utuh
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 20, font: { weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+
+            // 3. Histogram Pendidikan
+            new Chart(document.getElementById('chartPendidikan'), {
+                type: 'bar',
+                data: {
+                    labels: ['Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK', 'Diploma', 'S1/S2'],
+                    datasets: [{
+                        label: 'Jumlah Penduduk',
+                        data: [45, 320, 380, 410, 65, 64],
+                        backgroundColor: '#10b981',
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 4. Histogram Pekerjaan
+            new Chart(document.getElementById('chartPekerjaan'), {
+                type: 'bar',
+                data: {
+                    labels: ['Petani', 'Pedagang', 'PNS/TNI/Polri', 'Karyawan Swasta', 'Buruh', 'Lainnya'],
+                    datasets: [{
+                        label: 'Jumlah Penduduk',
+                        data: [420, 210, 45, 180, 310, 119],
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

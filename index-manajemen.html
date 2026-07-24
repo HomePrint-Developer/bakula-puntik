@@ -68,7 +68,6 @@
             color: #3b82f6;
         }
 
-        /* Styling Error Validation (Merah jika format salah) */
         input:invalid:not(:placeholder-shown) {
             border-color: #f87171;
             background-color: #fef2f2;
@@ -78,6 +77,7 @@
             border-color: #34d399;
         }
 
+        /* Styling Accordion Mobile: Sembunyikan field kecuali No.KK(2) dan Nama(3) saat collapsed */
         @media (max-width: 768px) {
             .responsive-table thead {
                 display: none;
@@ -92,6 +92,7 @@
                 padding: 0.5rem;
                 background-color: #ffffff;
                 box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                cursor: pointer;
             }
 
             .responsive-table tbody td {
@@ -115,6 +116,18 @@
                 color: #9ca3af;
                 text-align: left;
                 margin-right: 1rem;
+                flex-shrink: 0;
+            }
+
+            /* Logic Accordion: Sembunyikan kolom 1, 4, 5, 6 saat tertutup */
+            .responsive-table tbody tr.collapsed td:not(:nth-child(2)):not(:nth-child(3)) {
+                display: none;
+            }
+
+            .responsive-table tbody tr.collapsed td {
+                border-bottom: none;
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
             }
 
             .responsive-table tbody td:nth-child(6) {
@@ -151,11 +164,29 @@
             </nav>
             <div class="flex items-center gap-3 border-l border-gray-200 pl-6 h-8">
                 <div class="text-right hidden sm:block">
-                    <p class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
+                    <p id="greetingText" class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
                     <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
                 </div>
-                <button
-                    class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm">AD</button>
+                <div class="relative">
+                    <button onclick="toggleUserMenu()" id="avatarBtn"
+                        class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">AD</button>
+                    <div id="userMenu"
+                        class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in">
+                        <div class="px-4 py-2 border-b border-gray-50 mb-1 sm:hidden">
+                            <p id="greetingTextMobile" class="text-xs font-bold text-gray-800 truncate">Hai, Admin</p>
+                        </div>
+                        <a href="index-admin.html"
+                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Dashboard</a>
+                        <a href="index-manajemen.html"
+                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Manajemen
+                            Penduduk</a>
+                        <hr class="my-1 border-gray-100 md:hidden">
+                        <button onclick="logout()"
+                            class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-3 font-bold transition-colors">
+                            <i class="fa-solid fa-power-off"></i> Keluar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -170,17 +201,18 @@
                 <div class="relative w-full md:w-64">
                     <i
                         class="fa-solid fa-magnifying-glass absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" id="searchInput" placeholder="Cari No. KK atau Nama..."
+                    <input type="text" id="searchInput" onkeyup="filterData()" placeholder="Cari No. KK atau Nama..."
                         class="w-full pl-9 md:pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-xs focus:ring-2 focus:ring-blue-600 outline-none shadow-sm transition-all">
                 </div>
-                <button onclick="openModal('modalAddKK')"
+                <button onclick="openModalTambah()"
                     class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-200 whitespace-nowrap">
                     <i class="fa-solid fa-plus text-xs"></i> Tambah KK
                 </button>
             </div>
         </div>
 
-        <div class="bg-transparent md:bg-white md:rounded-3xl md:border border-gray-200 md:shadow-sm overflow-hidden">
+        <div
+            class="bg-transparent md:bg-white md:rounded-3xl md:border border-gray-200 md:shadow-sm overflow-hidden flex flex-col">
             <div class="overflow-x-auto">
                 <table class="w-full text-left responsive-table" id="dataTable">
                     <thead>
@@ -201,6 +233,33 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div
+                class="p-4 md:p-5 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/50">
+                <div class="flex items-center gap-2 text-xs font-bold text-gray-500">
+                    <span>Tampilkan</span>
+                    <select id="rowLimit" onchange="changeLimit()"
+                        class="border border-gray-200 text-gray-700 rounded-lg px-3 py-1.5 bg-white outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="all">Semua</option>
+                    </select>
+                    <span>Data</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="prevPage()" id="btnPrev"
+                        class="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"><i
+                            class="fa-solid fa-chevron-left mr-1"></i> Prev</button>
+                    <span id="pageInfo"
+                        class="text-xs font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200">0
+                        / 0</span>
+                    <button onclick="nextPage()" id="btnNext"
+                        class="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">Next
+                        <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                </div>
             </div>
         </div>
     </main>
@@ -279,13 +338,15 @@
         class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
         <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
             <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-blue-50/50 shrink-0">
-                <h3 class="font-black text-gray-800 text-lg uppercase tracking-tight">Formulir Kartu Keluarga</h3>
+                <h3 id="modalTitleKK" class="font-black text-gray-800 text-lg uppercase tracking-tight">Formulir Kartu
+                    Keluarga</h3>
                 <button onclick="closeModal('modalAddKK')" class="text-gray-400 hover:text-red-500 transition-colors"><i
                         class="fa-solid fa-xmark text-xl"></i></button>
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 custom-scrollbar bg-slate-50">
                 <form id="formKkData" class="space-y-6">
+                    <input type="hidden" id="edit_id_firebase">
                     <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                         <h4
                             class="text-sm font-black text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-3 mb-4">
@@ -344,9 +405,39 @@
         </div>
     </div>
 
+    <script>
+        // Logika Menu Navbar
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('hidden');
+        }
+
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('greetingText').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('greetingTextMobile').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('avatarBtn').innerText = savedUsername.substring(0, 2).toUpperCase();
+            }
+        });
+
+        // Kontrol Modal Dasar
+        window.closeModal = function (id) {
+            document.getElementById(id).classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('overflow-hidden');
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
@@ -362,22 +453,147 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // --- State Manajemen ---
         let globalDataKK = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let rowsLimit = 25;
 
         // Realtime Listener
         onValue(ref(db, 'kartu_keluarga'), (snapshot) => {
             const data = snapshot.val();
             globalDataKK = [];
             if (data) {
-                // Convert Object ke Array
                 for (let key in data) {
                     globalDataKK.push({ id_firebase: key, ...data[key] });
                 }
             }
-            renderTable(globalDataKK);
+            // Reverse agar yang terbaru di atas
+            globalDataKK.reverse();
+            filteredData = [...globalDataKK];
+            currentPage = 1;
+            renderTableWithPagination();
         });
 
-        // Submit Form
+        // --- Logika Pagination & Render ---
+        window.filterData = function () {
+            const val = document.getElementById('searchInput').value.toLowerCase();
+            filteredData = globalDataKK.filter(kk =>
+                kk.no_kk.toLowerCase().includes(val) ||
+                (kk.kepala_keluarga && kk.kepala_keluarga.toLowerCase().includes(val))
+            );
+            currentPage = 1;
+            renderTableWithPagination();
+        }
+
+        window.changeLimit = function () {
+            const val = document.getElementById('rowLimit').value;
+            rowsLimit = val === 'all' ? 'all' : parseInt(val);
+            currentPage = 1;
+            renderTableWithPagination();
+        }
+
+        window.prevPage = function () {
+            if (currentPage > 1) { currentPage--; renderTableWithPagination(); }
+        }
+
+        window.nextPage = function () {
+            let maxPage = rowsLimit === 'all' ? 1 : Math.ceil(filteredData.length / rowsLimit);
+            if (currentPage < maxPage) { currentPage++; renderTableWithPagination(); }
+        }
+
+        function renderTableWithPagination() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-gray-400 italic">Data kosong atau tidak ditemukan.</td></tr>`;
+                document.getElementById('pageInfo').innerText = `0 / 0`;
+                document.getElementById('btnPrev').disabled = true;
+                document.getElementById('btnNext').disabled = true;
+                return;
+            }
+
+            let totalPages = rowsLimit === 'all' ? 1 : Math.ceil(filteredData.length / rowsLimit);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            document.getElementById('pageInfo').innerText = `${currentPage} / ${totalPages}`;
+            document.getElementById('btnPrev').disabled = currentPage === 1;
+            document.getElementById('btnNext').disabled = currentPage === totalPages;
+
+            let startIndex = rowsLimit === 'all' ? 0 : (currentPage - 1) * rowsLimit;
+            let endIndex = rowsLimit === 'all' ? filteredData.length : startIndex + rowsLimit;
+            let displayData = filteredData.slice(startIndex, endIndex);
+
+            displayData.forEach((kk, index) => {
+                const tr = document.createElement('tr');
+                // Berikan class 'collapsed' agar melipat saat mode HP
+                tr.className = 'border-b border-gray-100 hover:bg-blue-50/30 transition-all text-xs md:table-row collapsed';
+                tr.onclick = function (e) {
+                    if (window.innerWidth <= 768 && !e.target.closest('button')) {
+                        document.querySelectorAll('#tableBody tr').forEach(row => { if (row !== this) row.classList.add('collapsed'); });
+                        this.classList.toggle('collapsed');
+                    }
+                };
+
+                // Index nomor menyesuaikan pagination
+                const visualIndex = startIndex + index + 1;
+
+                tr.innerHTML = `
+                    <td data-label="No" class="md:px-4 py-4 md:text-center text-gray-400 font-mono font-bold">${visualIndex}</td>
+                    <td data-label="No. KK" class="md:px-6 py-4 font-mono font-black text-blue-700 tracking-wider">${kk.no_kk}</td>
+                    <td data-label="Kepala Keluarga" class="md:px-6 py-4 font-bold text-gray-800 uppercase">${kk.kepala_keluarga || '-'}</td>
+                    <td data-label="Tanggungan" class="md:px-4 py-4 md:text-center font-bold text-gray-600">${kk.tanggungan} Jiwa</td>
+                    <td data-label="RT/RW" class="md:px-6 py-4 md:text-center font-bold text-gray-600">${kk.rt} / ${kk.rw}</td>
+                    <td data-label="Aksi" class="md:px-6 py-4">
+                        <div class="flex justify-end md:justify-center gap-2 relative z-10">
+                            <button onclick='window.openDetail(${JSON.stringify(kk)})' class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-blue-100" title="Detail Data"><i class="fa-solid fa-list-ul text-[10px]"></i></button>
+                            <button onclick='window.editData(${JSON.stringify(kk)})' class="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center border border-amber-100" title="Edit Data"><i class="fa-solid fa-pencil text-[10px]"></i></button>
+                            <button onclick="window.deleteData('${kk.id_firebase}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center border border-red-100" title="Hapus Data"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- Logika CRUD ---
+
+        // Setup Form Baru
+        window.openModalTambah = function () {
+            document.getElementById('modalTitleKK').innerText = "Tambah Kartu Keluarga";
+            document.getElementById('formKkData').reset();
+            document.getElementById('edit_id_firebase').value = "";
+            document.getElementById('containerAnggota').innerHTML = '';
+            window.anggotaIndex = 0; // Reset counter
+            addFormAnggota(); // Minimal 1 form
+
+            document.getElementById('modalAddKK').classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        // Setup Form Edit
+        window.editData = function (kk) {
+            document.getElementById('modalTitleKK').innerText = "Edit Kartu Keluarga";
+            document.getElementById('edit_id_firebase').value = kk.id_firebase;
+            document.getElementById('input_nokk').value = kk.no_kk;
+            document.getElementById('input_rt').value = kk.rt;
+            document.getElementById('input_rw').value = kk.rw;
+            document.getElementById('input_alamat').value = kk.alamat;
+
+            document.getElementById('containerAnggota').innerHTML = '';
+            window.anggotaIndex = 0; // Reset counter
+
+            if (kk.anggota) {
+                kk.anggota.forEach(p => addFormAnggota(p)); // Tambahkan form yang sudah di-fill
+            }
+
+            document.getElementById('modalAddKK').classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        // Simpan Data (Tambah / Update)
         document.getElementById('formKkData').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btnSubmit = document.getElementById('btnSubmitKK');
@@ -418,15 +634,18 @@
                 };
 
                 dataToSave.anggota.push(p);
-                // Assign nama pertama jadi Kepala Keluarga (Berdasarkan urutan)
-                if (index === 0) dataToSave.kepala_keluarga = p.nama;
+                if (index === 0) dataToSave.kepala_keluarga = p.nama; // Index 0 jadi Kepala KK
             });
 
             try {
-                await push(ref(db, 'kartu_keluarga'), dataToSave);
-                alert("Berhasil disimpan ke server!");
+                const editId = document.getElementById('edit_id_firebase').value;
+                if (editId) {
+                    await set(ref(db, 'kartu_keluarga/' + editId), dataToSave); // Timpa Data (Edit)
+                } else {
+                    await push(ref(db, 'kartu_keluarga'), dataToSave); // Tambah Data Baru
+                }
+                alert("Data berhasil disimpan!");
                 window.closeModal('modalAddKK');
-                document.getElementById('formKkData').reset();
             } catch (error) {
                 alert("Gagal menyimpan: " + error.message);
             } finally {
@@ -437,7 +656,7 @@
 
         // Hapus Data
         window.deleteData = async (idFirebase) => {
-            if (confirm("Apakah Anda yakin ingin menghapus Kartu Keluarga ini dari server secara permanen?")) {
+            if (confirm("Apakah Anda yakin ingin menghapus Kartu Keluarga ini secara permanen?")) {
                 try {
                     await remove(ref(db, 'kartu_keluarga/' + idFirebase));
                 } catch (error) {
@@ -445,68 +664,22 @@
                 }
             }
         }
-
-        // Pencarian (Search)
-        document.getElementById('searchInput').addEventListener('keyup', function () {
-            const val = this.value.toLowerCase();
-            const filtered = globalDataKK.filter(kk =>
-                kk.no_kk.toLowerCase().includes(val) ||
-                kk.kepala_keluarga.toLowerCase().includes(val)
-            );
-            renderTable(filtered);
-        });
-
-        // Rendering Table Global Helper
-        window.renderTable = function (dataArray) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            if (dataArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-gray-400 italic">Data kosong atau tidak ditemukan.</td></tr>`;
-                return;
-            }
-
-            dataArray.forEach((kk, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-gray-100 hover:bg-blue-50/30 transition-all text-xs md:table-row collapsed';
-                tr.onclick = function (e) {
-                    if (window.innerWidth <= 768 && !e.target.closest('button')) {
-                        document.querySelectorAll('#tableBody tr').forEach(row => { if (row !== this) row.classList.add('collapsed'); });
-                        this.classList.toggle('collapsed');
-                    }
-                };
-
-                tr.innerHTML = `
-                    <td data-label="No" class="md:px-4 py-4 md:text-center text-gray-400 font-mono font-bold">${index + 1}</td>
-                    <td data-label="No. KK" class="md:px-6 py-4 font-mono font-black text-blue-700 tracking-wider">${kk.no_kk}</td>
-                    <td data-label="Kepala Keluarga" class="md:px-6 py-4 font-bold text-gray-800 uppercase">${kk.kepala_keluarga}</td>
-                    <td data-label="Tanggungan" class="md:px-4 py-4 md:text-center font-bold text-gray-600">${kk.tanggungan} Jiwa</td>
-                    <td data-label="RT/RW" class="md:px-6 py-4 md:text-center font-bold text-gray-600">${kk.rt} / ${kk.rw}</td>
-                    <td data-label="Aksi" class="md:px-6 py-4">
-                        <div class="flex justify-end md:justify-center gap-2 relative z-10">
-                            <button onclick='window.openDetail(${JSON.stringify(kk)})' class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center border border-blue-100"><i class="fa-solid fa-list-ul text-[10px]"></i></button>
-                            <button onclick="window.deleteData('${kk.id_firebase}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center border border-red-100"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
     </script>
 
     <script>
-        let anggotaIndex = 0;
+        window.anggotaIndex = 0;
 
-        function addFormAnggota() {
-            anggotaIndex++;
+        window.addFormAnggota = function (data = null) {
+            window.anggotaIndex++;
+            const idx = window.anggotaIndex;
             const container = document.getElementById('containerAnggota');
             const newForm = document.createElement('div');
             newForm.className = 'anggota-item p-5 border border-blue-200 rounded-xl bg-blue-50/30 relative group mt-6 animate-fade-in';
-            newForm.dataset.index = anggotaIndex;
+            newForm.dataset.index = idx;
 
             newForm.innerHTML = `
-                <span class="absolute -top-3 left-4 bg-gray-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Data Orang Ke-${anggotaIndex}</span>
-                ${anggotaIndex > 1 ? `<button type="button" onclick="this.parentElement.remove()" class="absolute -top-3 right-4 bg-red-100 text-red-600 text-[10px] font-black px-3 py-1 rounded-full uppercase hover:bg-red-600 hover:text-white transition-colors"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>` : ''}
+                <span class="absolute -top-3 left-4 bg-gray-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Data Orang Ke-${idx}</span>
+                ${idx > 1 ? `<button type="button" onclick="this.parentElement.remove()" class="absolute -top-3 right-4 bg-red-100 text-red-600 text-[10px] font-black px-3 py-1 rounded-full uppercase hover:bg-red-600 hover:text-white transition-colors"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>` : ''}
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                     <div class="space-y-1"><label class="text-[9px] font-bold text-gray-400 uppercase">Nama Lengkap</label><input type="text" data-name="nama" pattern="[a-zA-Z\\s\\.,]+" title="Hanya huruf, spasi, titik, koma" placeholder="Sesuai Akta/Ijazah" class="w-full p-2 border border-gray-200 rounded-lg text-xs" required></div>
@@ -523,8 +696,8 @@
                     <div class="space-y-1">
                         <label class="text-[9px] font-bold text-gray-400 uppercase block">Jenis Kelamin</label>
                         <div class="flex gap-2">
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="jk_${anggotaIndex}" value="L" class="peer sr-only" required><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">L</div></label>
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="jk_${anggotaIndex}" value="P" class="peer sr-only"><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-pink-500 peer-checked:text-white transition-all">P</div></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="jk_${idx}" value="L" class="peer sr-only" required><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">L</div></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="jk_${idx}" value="P" class="peer sr-only"><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-pink-500 peer-checked:text-white transition-all">P</div></label>
                         </div>
                     </div>
                     
@@ -563,8 +736,8 @@
                     <div class="space-y-1">
                         <label class="text-[9px] font-bold text-gray-400 uppercase block">Kewarganegaraan</label>
                         <div class="flex gap-2">
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="wn_${anggotaIndex}" value="WNI" class="peer sr-only" required checked><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">WNI</div></label>
-                            <label class="flex-1 cursor-pointer"><input type="radio" name="wn_${anggotaIndex}" value="WNA" class="peer sr-only"><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">WNA</div></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="wn_${idx}" value="WNI" class="peer sr-only" required checked><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">WNI</div></label>
+                            <label class="flex-1 cursor-pointer"><input type="radio" name="wn_${idx}" value="WNA" class="peer sr-only"><div class="w-full text-center py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-500 peer-checked:bg-blue-600 peer-checked:text-white transition-all">WNA</div></label>
                         </div>
                     </div>
                     
@@ -580,23 +753,35 @@
                 </div>
             `;
             container.appendChild(newForm);
-            newForm.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
 
-        // Initialize First Form
-        document.addEventListener('DOMContentLoaded', () => { addFormAnggota(); });
+            // Logika Auto-Fill Jika Masuk Mode Edit
+            if (data) {
+                newForm.querySelector('[data-name="nama"]').value = data.nama || '';
+                newForm.querySelector('[data-name="nik"]').value = data.nik || '';
+                newForm.querySelector('[data-name="hubungan"]').value = data.hubungan || '';
+                newForm.querySelector('[data-name="tempat"]').value = data.tempat || '';
+                newForm.querySelector('[data-name="tgl"]').value = data.tgl || '';
 
-        window.openModal = function (id) {
-            document.getElementById(id).classList.remove('opacity-0', 'pointer-events-none');
-            document.body.classList.add('overflow-hidden');
-            if (id === 'modalAddKK' && document.querySelectorAll('.anggota-item').length === 0) {
-                addFormAnggota(); // Reset minimal 1 anggota kalau kosong
+                if (data.jk === 'L') newForm.querySelector(`input[name="jk_${idx}"][value="L"]`).checked = true;
+                if (data.jk === 'P') newForm.querySelector(`input[name="jk_${idx}"][value="P"]`).checked = true;
+
+                newForm.querySelector('[data-name="pendidikan"]').value = data.pendidikan || '';
+                newForm.querySelector('[data-name="pekerjaan"]').value = data.pekerjaan || '';
+                newForm.querySelector('[data-name="darah"]').value = data.darah || '';
+                newForm.querySelector('[data-name="agama"]').value = data.agama || '';
+                newForm.querySelector('[data-name="kawin"]').value = data.kawin || '';
+                newForm.querySelector('[data-name="tgl_kawin"]').value = (data.tgl_kawin === '-' ? '' : data.tgl_kawin);
+
+                if (data.wn === 'WNI') newForm.querySelector(`input[name="wn_${idx}"][value="WNI"]`).checked = true;
+                if (data.wn === 'WNA') newForm.querySelector(`input[name="wn_${idx}"][value="WNA"]`).checked = true;
+
+                newForm.querySelector('[data-name="paspor"]').value = data.paspor || '-';
+                newForm.querySelector('[data-name="kitap"]').value = data.kitap || '-';
+                newForm.querySelector('[data-name="ayah"]').value = data.ayah || '';
+                newForm.querySelector('[data-name="ibu"]').value = data.ibu || '';
             }
-        }
 
-        window.closeModal = function (id) {
-            document.getElementById(id).classList.add('opacity-0', 'pointer-events-none');
-            document.body.classList.remove('overflow-hidden');
+            newForm.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
 
         window.openDetail = function (kk) {
@@ -632,7 +817,8 @@
                     </tr>
                 `;
             });
-            window.openModal('modalDetail');
+            document.getElementById('modalDetail').classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('overflow-hidden');
         }
     </script>
 </body>

@@ -34,14 +34,12 @@
 
         .nav-link.active {
             color: #2563eb;
-            /* blue-600 */
             font-weight: 800;
             border-bottom: 3px solid #2563eb;
         }
 
         .nav-link {
             color: #64748b;
-            /* slate-500 */
             font-weight: 600;
             border-bottom: 3px solid transparent;
             transition: all 0.2s;
@@ -64,8 +62,8 @@
 
         <div class="flex items-center gap-6 h-full">
             <nav class="hidden md:flex h-full items-center gap-6 mr-4">
-                <a href="#" class="nav-link active h-full flex items-center px-2">Dashboard</a>
-                <a href="#" class="nav-link h-full flex items-center px-2">Manajemen Kependudukan</a>
+                <a href="index-admin.html" class="nav-link active h-full flex items-center px-2">Dashboard</a>
+                <a href="index-manajemen.html" class="nav-link h-full flex items-center px-2">Manajemen Kependudukan</a>
             </nav>
 
             <div class="flex items-center gap-3 border-l border-gray-200 pl-6 h-8">
@@ -216,12 +214,12 @@
 
             // 2. Pie Chart Jenis Kelamin
             new Chart(document.getElementById('chartGender'), {
-                type: 'pie', // Diubah menjadi pie
+                type: 'pie',
                 data: {
                     labels: ['Laki-laki', 'Perempuan'],
                     datasets: [{
                         data: [650, 634],
-                        backgroundColor: ['#2563eb', '#f472b6'], // Biru dan Merah Muda
+                        backgroundColor: ['#2563eb', '#f472b6'],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
@@ -229,7 +227,6 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    // cutout: '70%' dihapus agar utuh
                     plugins: {
                         legend: {
                             position: 'bottom',

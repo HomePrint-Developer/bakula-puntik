@@ -68,18 +68,18 @@
 
             <div class="flex items-center gap-3 border-l border-gray-200 pl-6 h-8">
                 <div class="text-right hidden sm:block">
-                    <p class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
+                    <p id="greetingText" class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
                     <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
                 </div>
                 <div class="relative">
-                    <button onclick="toggleUserMenu()"
+                    <button onclick="toggleUserMenu()" id="avatarBtn"
                         class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">
                         AD
                     </button>
                     <div id="userMenu"
                         class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in">
                         <div class="px-4 py-2 border-b border-gray-50 mb-1 sm:hidden">
-                            <p class="text-xs font-bold text-gray-800 truncate">Hai, Admin</p>
+                            <p id="greetingTextMobile" class="text-xs font-bold text-gray-800 truncate">Hai, Admin</p>
                         </div>
                         <a href="index-admin.html"
                             class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Dashboard</a>
@@ -101,17 +101,17 @@
 
         <div class="mb-8">
             <h1 class="text-2xl font-black text-gray-800 tracking-tight">Dashboard Statistik</h1>
-            <p class="text-sm text-gray-500 font-medium mt-1">Ringkasan data kependudukan Desa Puntik Luar</p>
+            <p class="text-sm text-gray-500 font-medium mt-1">Ringkasan data kependudukan terpadu Desa Puntik Luar</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
             <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5">
                 <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-map-location-dot text-2xl text-blue-600"></i>
                 </div>
                 <div>
                     <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Jumlah RT Terdata</p>
-                    <p class="text-3xl font-black text-gray-800">12</p>
+                    <p id="statRT" class="text-3xl font-black text-gray-800">0</p>
                 </div>
             </div>
 
@@ -121,7 +121,17 @@
                 </div>
                 <div>
                     <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Jumlah RW Terdata</p>
-                    <p class="text-3xl font-black text-gray-800">4</p>
+                    <p id="statRW" class="text-3xl font-black text-gray-800">0</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-house-user text-2xl text-emerald-600"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Kepala Keluarga</p>
+                    <p id="statKK" class="text-3xl font-black text-gray-800">0</p>
                 </div>
             </div>
 
@@ -132,7 +142,7 @@
                 </div>
                 <div>
                     <p class="text-[10px] text-blue-100 font-bold tracking-widest uppercase mb-1">Total Penduduk</p>
-                    <p class="text-3xl font-black text-white">1.284</p>
+                    <p id="statPenduduk" class="text-3xl font-black text-white">0</p>
                 </div>
             </div>
         </div>
@@ -170,32 +180,150 @@
     </main>
 
     <script>
-        // Toggle Dropdown Profil
         function toggleUserMenu() {
             document.getElementById('userMenu').classList.toggle('hidden');
         }
 
-        // Fungsi Keluar / Logout
         function logout() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
                 window.location.href = 'index.html';
             }
         }
 
-        // --- Konfigurasi Chart.js ---
-        document.addEventListener('DOMContentLoaded', function () {
-            // Global Styling ChartJS
-            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-            Chart.defaults.color = '#94a3b8';
+        // Display Dynamic Username
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('greetingText').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('greetingTextMobile').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('avatarBtn').innerText = savedUsername.substring(0, 2).toUpperCase();
+            }
+        });
+    </script>
 
-            // 1. Histogram Usia
-            new Chart(document.getElementById('chartUsia'), {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
+            authDomain: "bakula-puntik.firebaseapp.com",
+            databaseURL: "https://bakula-puntik-default-rtdb.firebaseio.com",
+            projectId: "bakula-puntik",
+            storageBucket: "bakula-puntik.firebasestorage.app",
+            messagingSenderId: "364750456093",
+            appId: "1:364750456093:web:751d5ebd6cc045b0d28df4",
+            measurementId: "G-V1BF0S7J2D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Chart Instance Variables
+        let chartUsiaInstance = null;
+        let chartGenderInstance = null;
+        let chartPendidikanInstance = null;
+        let chartPekerjaanInstance = null;
+
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = '#94a3b8';
+
+        // Helper Hitung Umur dari Tanggal Lahir
+        function calculateAge(birthDateString) {
+            if (!birthDateString) return 0;
+            const today = new Date();
+            const birthDate = new Date(birthDateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age >= 0 ? age : 0;
+        }
+
+        // Realtime Data Listener
+        onValue(ref(db, 'kartu_keluarga'), (snapshot) => {
+            const data = snapshot.val();
+            const listKK = data ? Object.values(data) : [];
+
+            // 1. Metric Counts
+            const setRT = new Set();
+            const setRW = new Set();
+            let totalKKCount = 0;
+            let totalPendudukCount = 0;
+
+            // Chart Data Containers
+            const ageBuckets = { '0-14': 0, '15-24': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55-64': 0, '65+': 0 };
+            const genderCounts = { 'Laki-laki': 0, 'Perempuan': 0 };
+            const eduCounts = {};
+            const jobCounts = {};
+
+            listKK.forEach(kk => {
+                if (kk.rt) setRT.add(kk.rt.toString().trim());
+                if (kk.rw) setRW.add(kk.rw.toString().trim());
+
+                // Total Tanggungan
+                totalPendudukCount += parseInt(kk.tanggungan || 0);
+
+                if (kk.anggota && Array.isArray(kk.anggota)) {
+                    kk.anggota.forEach(p => {
+                        // Total Kepala Keluarga
+                        if (p.hubungan === 'Kepala Keluarga') {
+                            totalKKCount++;
+                        }
+
+                        // Usia
+                        const age = calculateAge(p.tgl);
+                        if (age <= 14) ageBuckets['0-14']++;
+                        else if (age <= 24) ageBuckets['15-24']++;
+                        else if (age <= 34) ageBuckets['25-34']++;
+                        else if (age <= 44) ageBuckets['35-44']++;
+                        else if (age <= 54) ageBuckets['45-54']++;
+                        else if (age <= 64) ageBuckets['55-64']++;
+                        else ageBuckets['65+']++;
+
+                        // Gender
+                        if (p.jk === 'L' || p.jk === 'Laki-laki') genderCounts['Laki-laki']++;
+                        else if (p.jk === 'P' || p.jk === 'Perempuan') genderCounts['Perempuan']++;
+
+                        // Pendidikan
+                        if (p.pendidikan) {
+                            eduCounts[p.pendidikan] = (eduCounts[p.pendidikan] || 0) + 1;
+                        }
+
+                        // Pekerjaan
+                        if (p.pekerjaan) {
+                            jobCounts[p.pekerjaan] = (jobCounts[p.pekerjaan] || 0) + 1;
+                        }
+                    });
+                }
+            });
+
+            // Update DOM Cards
+            document.getElementById('statRT').innerText = setRT.size;
+            document.getElementById('statRW').innerText = setRW.size;
+            document.getElementById('statKK').innerText = totalKKCount;
+            document.getElementById('statPenduduk').innerText = totalPendudukCount;
+
+            // Render/Update Charts
+            renderChartUsia(ageBuckets);
+            renderChartGender(genderCounts);
+            renderChartPendidikan(eduCounts);
+            renderChartPekerjaan(jobCounts);
+        });
+
+        // --- Render Functions ---
+        function renderChartUsia(buckets) {
+            if (chartUsiaInstance) chartUsiaInstance.destroy();
+            chartUsiaInstance = new Chart(document.getElementById('chartUsia'), {
                 type: 'bar',
                 data: {
-                    labels: ['0-14', '15-24', '25-34', '35-44', '45-54', '55+'],
+                    labels: Object.keys(buckets),
                     datasets: [{
                         label: 'Jumlah Penduduk',
-                        data: [240, 180, 310, 250, 190, 114],
+                        data: Object.values(buckets),
                         backgroundColor: '#3b82f6',
                         borderRadius: 8,
                         barPercentage: 0.6
@@ -206,19 +334,21 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { borderDash: [4, 4] } },
                         x: { grid: { display: false } }
                     }
                 }
             });
+        }
 
-            // 2. Pie Chart Jenis Kelamin
-            new Chart(document.getElementById('chartGender'), {
+        function renderChartGender(counts) {
+            if (chartGenderInstance) chartGenderInstance.destroy();
+            chartGenderInstance = new Chart(document.getElementById('chartGender'), {
                 type: 'pie',
                 data: {
                     labels: ['Laki-laki', 'Perempuan'],
                     datasets: [{
-                        data: [650, 634],
+                        data: [counts['Laki-laki'], counts['Perempuan']],
                         backgroundColor: ['#2563eb', '#f472b6'],
                         borderWidth: 0,
                         hoverOffset: 4
@@ -235,15 +365,22 @@
                     }
                 }
             });
+        }
 
-            // 3. Histogram Pendidikan
-            new Chart(document.getElementById('chartPendidikan'), {
+        function renderChartPendidikan(counts) {
+            if (chartPendidikanInstance) chartPendidikanInstance.destroy();
+
+            // Filter out 0 counts
+            const filteredLabels = Object.keys(counts).filter(k => counts[k] > 0);
+            const filteredData = filteredLabels.map(k => counts[k]);
+
+            chartPendidikanInstance = new Chart(document.getElementById('chartPendidikan'), {
                 type: 'bar',
                 data: {
-                    labels: ['Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK', 'Diploma', 'S1/S2'],
+                    labels: filteredLabels.length ? filteredLabels : ['Belum Ada Data'],
                     datasets: [{
                         label: 'Jumlah Penduduk',
-                        data: [45, 320, 380, 410, 65, 64],
+                        data: filteredData.length ? filteredData : [0],
                         backgroundColor: '#10b981',
                         borderRadius: 8,
                         barPercentage: 0.6
@@ -254,20 +391,27 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { borderDash: [4, 4] } },
                         x: { grid: { display: false } }
                     }
                 }
             });
+        }
 
-            // 4. Histogram Pekerjaan
-            new Chart(document.getElementById('chartPekerjaan'), {
+        function renderChartPekerjaan(counts) {
+            if (chartPekerjaanInstance) chartPekerjaanInstance.destroy();
+
+            // Filter out 0 counts
+            const filteredLabels = Object.keys(counts).filter(k => counts[k] > 0);
+            const filteredData = filteredLabels.map(k => counts[k]);
+
+            chartPekerjaanInstance = new Chart(document.getElementById('chartPekerjaan'), {
                 type: 'bar',
                 data: {
-                    labels: ['Petani', 'Pedagang', 'PNS/TNI/Polri', 'Karyawan Swasta', 'Buruh', 'Lainnya'],
+                    labels: filteredLabels.length ? filteredLabels : ['Belum Ada Data'],
                     datasets: [{
                         label: 'Jumlah Penduduk',
-                        data: [420, 210, 45, 180, 310, 119],
+                        data: filteredData.length ? filteredData : [0],
                         backgroundColor: '#8b5cf6',
                         borderRadius: 8,
                         barPercentage: 0.6
@@ -278,12 +422,12 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { borderDash: [4, 4] } },
                         x: { grid: { display: false } }
                     }
                 }
             });
-        });
+        }
     </script>
 </body>
 

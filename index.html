@@ -566,9 +566,6 @@
                     const theme = jobThemes[index] || jobThemes[2];
                     jobHtml += `
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-xl ${theme.bg} ${theme.text} flex items-center justify-center text-sm">
-                                <i class="fa-solid ${theme.icon}"></i>
-                            </div>
                             <div class="flex-grow">
                                 <p class="text-xs font-bold text-gray-700">${job} (${pct}%)</p>
                                 <p class="text-[10px] text-gray-400">${theme.desc}</p>

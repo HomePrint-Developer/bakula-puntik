@@ -32,40 +32,39 @@
         }
 
         /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
+        .custom-scrollbar::-webkit-scrollbar,
+        ::-webkit-scrollbar {
             height: 6px;
             width: 6px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
+        .custom-scrollbar::-webkit-scrollbar-track,
+        ::-webkit-scrollbar-track {
             background: #f1f5f9;
             border-radius: 10px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
+        .custom-scrollbar::-webkit-scrollbar-thumb,
+        ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+        ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
 
-        .nav-link.active {
+        /* Active Sidebar Link */
+        .sidebar-link.active {
+            background-color: #eff6ff;
             color: #2563eb;
+            border-right: 4px solid #2563eb;
             font-weight: 800;
-            border-bottom: 3px solid #2563eb;
         }
 
-        .nav-link {
-            color: #64748b;
-            font-weight: 600;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .nav-link:hover {
-            color: #3b82f6;
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
         }
 
         input:invalid:not(:placeholder-shown) {
@@ -119,7 +118,7 @@
                 flex-shrink: 0;
             }
 
-            /* Logic Accordion: Sembunyikan kolom 1, 4, 5, 6 saat tertutup */
+            /* Logic Accordion */
             .responsive-table tbody tr.collapsed td:not(:nth-child(2)):not(:nth-child(3)) {
                 display: none;
             }
@@ -149,49 +148,75 @@
     </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased text-gray-700">
 
     <header
-        class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-50 h-16 px-4 md:px-8 flex items-center justify-between shadow-sm">
+        class="md:hidden fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-40 h-16 px-4 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
-            <span class="font-black text-lg text-gray-800 tracking-tight uppercase hidden sm:block">BAKULA PUNTIK</span>
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-xl"></i>
+            <span class="font-black text-gray-800 tracking-tight uppercase text-sm">Bakula Puntik</span>
         </div>
-        <div class="flex items-center gap-6 h-full">
-            <nav class="hidden md:flex h-full items-center gap-6 mr-4">
-                <a href="index-admin.html" class="nav-link h-full flex items-center px-2">Dashboard</a>
-                <a href="#" class="nav-link active h-full flex items-center px-2">Manajemen Kependudukan</a>
-            </nav>
-            <div class="flex items-center gap-3 border-l border-gray-200 pl-6 h-8">
-                <div class="text-right hidden sm:block">
-                    <p id="greetingText" class="text-xs font-bold text-gray-800 leading-tight">Hai, Admin</p>
-                    <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
-                </div>
-                <div class="relative">
-                    <button onclick="toggleUserMenu()" id="avatarBtn"
-                        class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">AD</button>
-                    <div id="userMenu"
-                        class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in">
-                        <div class="px-4 py-2 border-b border-gray-50 mb-1 sm:hidden">
-                            <p id="greetingTextMobile" class="text-xs font-bold text-gray-800 truncate">Hai, Admin</p>
-                        </div>
-                        <a href="index-admin.html"
-                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Dashboard</a>
-                        <a href="index-manajemen.html"
-                            class="md:hidden block px-4 py-2 text-sm hover:bg-blue-50 text-gray-700 font-medium transition-colors">Manajemen
-                            Penduduk</a>
-                        <hr class="my-1 border-gray-100 md:hidden">
-                        <button onclick="logout()"
-                            class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-3 font-bold transition-colors">
-                            <i class="fa-solid fa-power-off"></i> Keluar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <button onclick="toggleSidebar()" class="text-gray-600 hover:text-blue-600 focus:outline-none p-2">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
     </header>
 
-    <main class="pt-24 px-4 md:px-8 pb-12 max-w-7xl mx-auto animate-fade-in">
+    <div id="sidebarOverlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-gray-900/50 z-40 hidden md:hidden transition-opacity opacity-0"></div>
+
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 bg-white w-64 shadow-xl border-r border-gray-100 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="hidden md:flex items-center justify-center gap-3 h-20 border-b border-gray-100">
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
+            <span class="font-black text-lg text-gray-800 tracking-tight uppercase">BAKULA PUNTIK</span>
+        </div>
+
+        <div class="md:hidden flex items-center justify-between h-16 px-4 border-b border-gray-100">
+            <span class="font-black text-gray-800 uppercase">Menu Admin</span>
+            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-500"><i
+                    class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Main Menu</p>
+
+            <a href="index-admin.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+            </a>
+            <a href="index-manajemen.html"
+                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600">
+                <i class="fa-solid fa-users w-5 text-center"></i> Kependudukan
+            </a>
+            <a href="fasilitas.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-building w-5 text-center"></i> Fasilitas Desa
+            </a>
+
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2 mt-4">Sistem</p>
+            <a href="setting.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan Desa
+            </a>
+        </div>
+
+        <div class="p-4 border-t border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase"
+                    id="avatarBtn">AD</div>
+                <div>
+                    <p id="greetingText" class="text-xs font-bold text-gray-800">Hai, Admin</p>
+                    <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
+                </div>
+            </div>
+            <button onclick="logout()"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl text-xs font-bold transition-colors">
+                <i class="fa-solid fa-power-off"></i> Keluar
+            </button>
+        </div>
+    </aside>
+
+    <main class="md:ml-64 pt-20 md:pt-8 px-4 md:px-8 pb-12 max-w-7xl mx-auto animate-fade-in">
         <div class="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
             <div class="w-full md:w-auto">
                 <h2 class="text-2xl font-black text-gray-800 tracking-tight">Manajemen Kependudukan</h2>
@@ -271,7 +296,8 @@
                 <div class="flex items-center gap-3">
                     <div
                         class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center text-lg shadow-sm">
-                        <i class="fa-solid fa-address-card"></i></div>
+                        <i class="fa-solid fa-address-card"></i>
+                    </div>
                     <div>
                         <h3 class="font-black text-blue-900 uppercase tracking-tight">Detail Kartu Keluarga</h3>
                         <p class="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Sistem Informasi
@@ -406,10 +432,29 @@
     </div>
 
     <script>
-        // Logika Menu Navbar
-        function toggleUserMenu() {
-            document.getElementById('userMenu').classList.toggle('hidden');
+        // Logika Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                overlay.classList.add('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-100'), 10);
+            } else {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            }
         }
+
+        // Tampilkan Info Admin & Logout
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('greetingText').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('avatarBtn').innerText = savedUsername.substring(0, 2).toUpperCase();
+            }
+        });
 
         function logout() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
@@ -418,15 +463,6 @@
                 window.location.href = 'index.html';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedUsername = localStorage.getItem('username');
-            if (savedUsername) {
-                document.getElementById('greetingText').innerText = `Hai, ${savedUsername}`;
-                document.getElementById('greetingTextMobile').innerText = `Hai, ${savedUsername}`;
-                document.getElementById('avatarBtn').innerText = savedUsername.substring(0, 2).toUpperCase();
-            }
-        });
 
         // Kontrol Modal Dasar
         window.closeModal = function (id) {
@@ -559,21 +595,18 @@
         }
 
         // --- Logika CRUD ---
-
-        // Setup Form Baru
         window.openModalTambah = function () {
             document.getElementById('modalTitleKK').innerText = "Tambah Kartu Keluarga";
             document.getElementById('formKkData').reset();
             document.getElementById('edit_id_firebase').value = "";
             document.getElementById('containerAnggota').innerHTML = '';
-            window.anggotaIndex = 0; // Reset counter
-            addFormAnggota(); // Minimal 1 form
+            window.anggotaIndex = 0;
+            addFormAnggota();
 
             document.getElementById('modalAddKK').classList.remove('opacity-0', 'pointer-events-none');
             document.body.classList.add('overflow-hidden');
         }
 
-        // Setup Form Edit
         window.editData = function (kk) {
             document.getElementById('modalTitleKK').innerText = "Edit Kartu Keluarga";
             document.getElementById('edit_id_firebase').value = kk.id_firebase;
@@ -583,17 +616,16 @@
             document.getElementById('input_alamat').value = kk.alamat;
 
             document.getElementById('containerAnggota').innerHTML = '';
-            window.anggotaIndex = 0; // Reset counter
+            window.anggotaIndex = 0;
 
             if (kk.anggota) {
-                kk.anggota.forEach(p => addFormAnggota(p)); // Tambahkan form yang sudah di-fill
+                kk.anggota.forEach(p => addFormAnggota(p));
             }
 
             document.getElementById('modalAddKK').classList.remove('opacity-0', 'pointer-events-none');
             document.body.classList.add('overflow-hidden');
         }
 
-        // Simpan Data (Tambah / Update)
         document.getElementById('formKkData').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btnSubmit = document.getElementById('btnSubmitKK');
@@ -634,15 +666,15 @@
                 };
 
                 dataToSave.anggota.push(p);
-                if (index === 0) dataToSave.kepala_keluarga = p.nama; // Index 0 jadi Kepala KK
+                if (index === 0) dataToSave.kepala_keluarga = p.nama;
             });
 
             try {
                 const editId = document.getElementById('edit_id_firebase').value;
                 if (editId) {
-                    await set(ref(db, 'kartu_keluarga/' + editId), dataToSave); // Timpa Data (Edit)
+                    await set(ref(db, 'kartu_keluarga/' + editId), dataToSave);
                 } else {
-                    await push(ref(db, 'kartu_keluarga'), dataToSave); // Tambah Data Baru
+                    await push(ref(db, 'kartu_keluarga'), dataToSave);
                 }
                 alert("Data berhasil disimpan!");
                 window.closeModal('modalAddKK');
@@ -654,7 +686,6 @@
             }
         });
 
-        // Hapus Data
         window.deleteData = async (idFirebase) => {
             if (confirm("Apakah Anda yakin ingin menghapus Kartu Keluarga ini secara permanen?")) {
                 try {
@@ -754,7 +785,6 @@
             `;
             container.appendChild(newForm);
 
-            // Logika Auto-Fill Jika Masuk Mode Edit
             if (data) {
                 newForm.querySelector('[data-name="nama"]').value = data.nama || '';
                 newForm.querySelector('[data-name="nik"]').value = data.nik || '';
@@ -780,7 +810,6 @@
                 newForm.querySelector('[data-name="ayah"]').value = data.ayah || '';
                 newForm.querySelector('[data-name="ibu"]').value = data.ibu || '';
             }
-
             newForm.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
 

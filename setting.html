@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Desa - Bakula Puntik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Active Sidebar Link */
+        .sidebar-link.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            border-right: 4px solid #2563eb;
+            font-weight: 800;
+        }
+
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="antialiased text-gray-700">
+
+    <header
+        class="md:hidden fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-40 h-16 px-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-xl"></i>
+            <span class="font-black text-gray-800 tracking-tight uppercase text-sm">Bakula Puntik</span>
+        </div>
+        <button onclick="toggleSidebar()" class="text-gray-600 hover:text-blue-600 focus:outline-none p-2">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+    </header>
+
+    <div id="sidebarOverlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-gray-900/50 z-40 hidden md:hidden transition-opacity opacity-0"></div>
+
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 bg-white w-64 shadow-xl border-r border-gray-100 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="hidden md:flex items-center justify-center gap-3 h-20 border-b border-gray-100">
+            <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
+            <span class="font-black text-lg text-gray-800 tracking-tight uppercase">BAKULA PUNTIK</span>
+        </div>
+
+        <div class="md:hidden flex items-center justify-between h-16 px-4 border-b border-gray-100">
+            <span class="font-black text-gray-800 uppercase">Menu Admin</span>
+            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-500"><i
+                    class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Main Menu</p>
+
+            <a href="index-admin.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+            </a>
+            <a href="index-manajemen.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-users w-5 text-center"></i> Kependudukan
+            </a>
+            <a href="#"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-building w-5 text-center"></i> Fasilitas Desa
+            </a>
+
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2 mt-4">Sistem</p>
+            <a href="setting.html"
+                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600">
+                <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan Desa
+            </a>
+        </div>
+
+        <div class="p-4 border-t border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase"
+                    id="avatarBtn">AD</div>
+                <div>
+                    <p id="greetingText" class="text-xs font-bold text-gray-800">Hai, Admin</p>
+                    <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Administrator</p>
+                </div>
+            </div>
+            <button onclick="logout()"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl text-xs font-bold transition-colors">
+                <i class="fa-solid fa-power-off"></i> Keluar
+            </button>
+        </div>
+    </aside>
+
+    <main class="md:ml-64 pt-20 md:pt-8 px-4 md:px-8 pb-12 min-h-screen animate-fade-in">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-8">
+                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Pengaturan Profil Desa</h1>
+                <p class="text-sm text-gray-500 font-medium mt-1">Data ini akan ditampilkan pada halaman beranda utama
+                </p>
+            </div>
+
+            <form id="formSettingDesa" class="space-y-6">
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                    <h4
+                        class="text-sm font-black text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-3 mb-6">
+                        <i class="fa-solid fa-id-card mr-2"></i> Identitas & Sejarah</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nama Desa</label>
+                            <input type="text" id="input_nama_desa" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-bold text-gray-800">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Kode Pos</label>
+                            <input type="text" id="input_kodepos" required pattern="\d{5}"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-mono font-bold text-gray-800">
+                        </div>
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Luas Wilayah</label>
+                            <input type="text" id="input_luas" required placeholder="Contoh: ± 1.250 Hektar"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-medium">
+                        </div>
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Sejarah Singkat
+                                Desa</label>
+                            <textarea id="input_sejarah" required rows="4"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none resize-none leading-relaxed text-gray-700"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                    <h4
+                        class="text-sm font-black text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-3 mb-6">
+                        <i class="fa-solid fa-map-location-dot mr-2"></i> Batas Wilayah Geografis</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Utara</label>
+                            <input type="text" id="batas_utara" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Selatan</label>
+                            <input type="text" id="batas_selatan" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Timur</label>
+                            <input type="text" id="batas_timur" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Barat</label>
+                            <input type="text" id="batas_barat" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4 pb-10">
+                    <button type="submit" id="btnSimpan"
+                        class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-sm font-black shadow-xl shadow-blue-200 transition-all flex items-center gap-3 w-full md:w-auto justify-center uppercase tracking-wider">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Desa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Logika Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                overlay.classList.add('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-100'), 10);
+            } else {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            }
+        }
+
+        // Tampilkan Info Admin
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('greetingText').innerText = `Hai, ${savedUsername}`;
+                document.getElementById('avatarBtn').innerText = savedUsername.substring(0, 2).toUpperCase();
+            }
+        });
+
+        // Logout
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('username');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
+            authDomain: "bakula-puntik.firebaseapp.com",
+            databaseURL: "https://bakula-puntik-default-rtdb.firebaseio.com",
+            projectId: "bakula-puntik",
+            storageBucket: "bakula-puntik.firebasestorage.app",
+            messagingSenderId: "364750456093",
+            appId: "1:364750456093:web:751d5ebd6cc045b0d28df4",
+            measurementId: "G-V1BF0S7J2D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Ambil Data Profil Desa saat halaman dimuat
+        const profilRef = ref(db, 'profil_desa');
+
+        get(profilRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                document.getElementById('input_nama_desa').value = data.nama || '';
+                document.getElementById('input_kodepos').value = data.kode_pos || '';
+                document.getElementById('input_luas').value = data.luas || '';
+                document.getElementById('input_sejarah').value = data.sejarah || '';
+
+                if (data.batas) {
+                    document.getElementById('batas_utara').value = data.batas.utara || '';
+                    document.getElementById('batas_selatan').value = data.batas.selatan || '';
+                    document.getElementById('batas_timur').value = data.batas.timur || '';
+                    document.getElementById('batas_barat').value = data.batas.barat || '';
+                }
+            } else {
+                console.log("Belum ada data profil desa di database, silakan isi form.");
+            }
+        }).catch((error) => {
+            console.error("Gagal mengambil data profil:", error);
+        });
+
+        // Event Submit Form Update Profil
+        document.getElementById('formSettingDesa').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnSimpan = document.getElementById('btnSimpan');
+            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+            btnSimpan.disabled = true;
+
+            const profilData = {
+                nama: document.getElementById('input_nama_desa').value,
+                kode_pos: document.getElementById('input_kodepos').value,
+                luas: document.getElementById('input_luas').value,
+                sejarah: document.getElementById('input_sejarah').value,
+                batas: {
+                    utara: document.getElementById('batas_utara').value,
+                    selatan: document.getElementById('batas_selatan').value,
+                    timur: document.getElementById('batas_timur').value,
+                    barat: document.getElementById('batas_barat').value
+                }
+            };
+
+            try {
+                // Gunakan set() untuk menimpa node 'profil_desa' dengan data baru
+                await set(profilRef, profilData);
+                alert("Pengaturan Profil Desa berhasil disimpan ke Server!");
+            } catch (error) {
+                alert("Gagal menyimpan data: " + error.message);
+            } finally {
+                btnSimpan.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Desa';
+                btnSimpan.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

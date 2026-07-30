@@ -45,7 +45,6 @@ bakula-puntik/
 ├── fasilitas.html          # Halaman Manajemen Fasilitas Desa
 ├── sosbud.html             # Halaman Manajemen Sosial & Budaya
 └── setting.html            # Halaman Pengaturan Profil & Tema Warna Desa
-
 ```
 ---
 
@@ -81,7 +80,6 @@ Pastikan aturan keamanan (Security Rules) pada Firebase Realtime Database Anda d
     }
   }
 }
-
 ```
 ---
 

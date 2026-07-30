@@ -15,7 +15,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Kelas Animasi Scroll */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -27,7 +26,6 @@
             transform: translateY(0);
         }
 
-        /* Utility untuk Card */
         .glass-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -35,7 +33,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
-        /* Custom Scrollbar Modal */
         .custom-scrollbar::-webkit-scrollbar {
             height: 6px;
             width: 6px;
@@ -68,6 +65,32 @@
                     <i class="fa-solid fa-users-viewfinder text-blue-600 text-2xl"></i>
                     <span class="font-black text-gray-800 tracking-tight text-lg uppercase">Bakula Puntik</span>
                 </div>
+
+                <div id="auth-container">
+                    <a href="login.html" id="btn-login"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-200 transition-all active:scale-95">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Masuk
+                    </a>
+
+                    <div id="user-profile"
+                        class="hidden flex items-center gap-3 border-l border-gray-200 pl-4 h-8 relative">
+                        <div class="text-right hidden sm:block">
+                            <p id="display-username" class="text-xs font-bold text-gray-800 leading-tight">Hai, User</p>
+                            <p class="text-[9px] text-blue-600 font-bold tracking-wider uppercase">Warga Desa</p>
+                        </div>
+                        <button onclick="toggleUserMenu()"
+                            class="w-9 h-9 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center font-black shadow-sm border border-blue-100 uppercase text-sm hover:bg-blue-100 transition-colors">
+                            <i class="fa-solid fa-user"></i>
+                        </button>
+                        <div id="userMenu"
+                            class="hidden absolute right-0 top-12 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                            <button onclick="logout()"
+                                class="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-3 font-bold transition-colors">
+                                <i class="fa-solid fa-power-off"></i> Keluar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -76,7 +99,8 @@
         <div class="max-w-3xl">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-800 mb-6 leading-tight tracking-tight">
                 Portal Informasi <br> <span
-                    class="text-blue-600 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Desa <span id="txt-nama-desa1" >-</span></span>
+                    class="text-blue-600 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Desa
+                    Puntik Luar</span>
             </h1>
             <p class="text-gray-500 font-medium mb-8 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
                 Sistem informasi dan manajemen kependudukan terpadu. Memberikan akses data yang transparan, akurat, dan
@@ -90,19 +114,17 @@
     </header>
 
     <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-24 z-10" id="profil-desa">
-
         <section class="reveal">
             <div class="text-center mb-10">
                 <h3 class="text-2xl md:text-3xl font-black text-gray-800">Identitas & Wilayah</h3>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 glass-card p-8 rounded-[2rem]">
                     <h4 class="text-lg font-black text-gray-800 mb-6 border-b pb-4">Profil Singkat</h4>
                     <div class="grid grid-cols-2 gap-y-6 gap-x-4">
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nama Desa</p>
-                            <p id="txt-nama-desa2" class="text-sm font-bold text-gray-800">-</p>
+                            <p id="txt-nama-desa" class="text-sm font-bold text-gray-800">-</p>
                         </div>
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kode Pos</p>
@@ -117,13 +139,13 @@
                             <p class="text-sm font-bold text-blue-600"><span id="stat-total-penduduk">0</span> Jiwa</p>
                         </div>
                         <div class="col-span-2">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Deskripsi singkat</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Sejarah
+                                Singkat</p>
                             <p id="txt-sejarah" class="text-xs md:text-sm text-gray-600 leading-relaxed text-justify">-
                             </p>
                         </div>
                     </div>
                 </div>
-
                 <div
                     class="glass-card p-8 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-200">
                     <h4 class="text-lg font-black mb-8 border-b border-blue-400/30 pb-4">Batas Wilayah</h4>
@@ -171,14 +193,13 @@
 
         <section class="reveal">
             <div class="text-center mb-10">
+
                 <h3 class="text-2xl md:text-3xl font-black text-gray-800">Komposisi Demografis</h3>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-card p-8 rounded-[2rem]">
                     <h4 class="text-sm font-black text-gray-800 mb-6 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-venus-mars text-blue-500"></i> Jenis Kelamin
-                    </h4>
+                        <i class="fa-solid fa-venus-mars text-blue-500"></i> Jenis Kelamin</h4>
                     <div class="flex items-center justify-between mb-2">
                         <span id="stat-gender-l-text" class="text-xs font-bold text-gray-600">Laki-laki (0%)</span>
                         <span id="stat-gender-p-text" class="text-xs font-bold text-gray-600">Perempuan (0%)</span>
@@ -190,13 +211,11 @@
 
                     <h4
                         class="text-sm font-black text-gray-800 mb-4 mt-10 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-chart-simple text-blue-500"></i> Kelompok Usia
-                    </h4>
+                        <i class="fa-solid fa-chart-simple text-blue-500"></i> Kelompok Usia</h4>
                     <div class="space-y-3">
                         <div>
-                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
-                                <span>Usia Produktif (15-64 th)</span><span id="stat-age-produktif-text">0%</span>
-                            </div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Usia
+                                    Produktif (15-64 th)</span><span id="stat-age-produktif-text">0%</span></div>
                             <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                                 <div id="stat-age-produktif-bar"
                                     class="h-full bg-indigo-500 rounded-full transition-all duration-1000"
@@ -204,9 +223,8 @@
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
-                                <span>Anak-anak (0-14 th)</span><span id="stat-age-anak-text">0%</span>
-                            </div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Anak-anak
+                                    (0-14 th)</span><span id="stat-age-anak-text">0%</span></div>
                             <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                                 <div id="stat-age-anak-bar"
                                     class="h-full bg-indigo-400 rounded-full transition-all duration-1000"
@@ -214,9 +232,8 @@
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
-                                <span>Lansia (>64 th)</span><span id="stat-age-lansia-text">0%</span>
-                            </div>
+                            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1"><span>Lansia (>64
+                                    th)</span><span id="stat-age-lansia-text">0%</span></div>
                             <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                                 <div id="stat-age-lansia-bar"
                                     class="h-full bg-indigo-300 rounded-full transition-all duration-1000"
@@ -225,69 +242,58 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="glass-card p-8 rounded-[2rem]">
                     <h4 class="text-sm font-black text-gray-800 mb-4 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-blue-500"></i> Pendidikan Tertinggi
-                    </h4>
-                    <div id="stat-education-container" class="flex flex-wrap gap-2 mb-10">
-                        <span class="text-[10px] font-bold text-gray-400 italic">Memuat data pendidikan...</span>
-                    </div>
-
+                        <i class="fa-solid fa-graduation-cap text-blue-500"></i> Pendidikan Tertinggi</h4>
+                    <div id="stat-education-container" class="flex flex-wrap gap-2 mb-10"><span
+                            class="text-[10px] font-bold text-gray-400 italic">Memuat data pendidikan...</span></div>
                     <h4 class="text-sm font-black text-gray-800 mb-4 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-briefcase text-blue-500"></i> Sektor Pekerjaan Utama
-                    </h4>
-                    <div id="stat-job-container" class="space-y-3">
-                        <span class="text-[10px] font-bold text-gray-400 italic">Memuat data pekerjaan...</span>
-                    </div>
+                        <i class="fa-solid fa-briefcase text-blue-500"></i> Sektor Pekerjaan Utama</h4>
+                    <div id="stat-job-container" class="space-y-3"><span
+                            class="text-[10px] font-bold text-gray-400 italic">Memuat data pekerjaan...</span></div>
                 </div>
             </div>
         </section>
 
         <section class="reveal">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
                 <div>
                     <h3 class="text-2xl font-black text-gray-800 mb-6">Sosial & Budaya</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="glass-card p-5 rounded-2xl">
-                            <i class="fa-solid fa-mosque text-2xl text-emerald-500 mb-3"></i>
+                        <div class="glass-card p-5 rounded-2xl"><i
+                                class="fa-solid fa-mosque text-2xl text-emerald-500 mb-3"></i>
                             <h4 class="text-xs font-black text-gray-800 mb-1">Agama Mayoritas</h4>
                             <p class="text-[10px] text-gray-500 font-medium">100% Islam</p>
                         </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <i class="fa-solid fa-comments text-2xl text-blue-500 mb-3"></i>
+                        <div class="glass-card p-5 rounded-2xl"><i
+                                class="fa-solid fa-comments text-2xl text-blue-500 mb-3"></i>
                             <h4 class="text-xs font-black text-gray-800 mb-1">Bahasa Daerah</h4>
                             <p class="text-[10px] text-gray-500 font-medium">Bahasa Banjar</p>
                         </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <i class="fa-solid fa-handshake-angle text-2xl text-indigo-500 mb-3"></i>
+                        <div class="glass-card p-5 rounded-2xl"><i
+                                class="fa-solid fa-handshake-angle text-2xl text-indigo-500 mb-3"></i>
                             <h4 class="text-xs font-black text-gray-800 mb-1">Lembaga Sosial</h4>
                             <p class="text-[10px] text-gray-500 font-medium">PKK, Karang Taruna, Posyandu</p>
                         </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <i class="fa-solid fa-users-rays text-2xl text-amber-500 mb-3"></i>
+                        <div class="glass-card p-5 rounded-2xl"><i
+                                class="fa-solid fa-users-rays text-2xl text-amber-500 mb-3"></i>
                             <h4 class="text-xs font-black text-gray-800 mb-1">Organisasi</h4>
                             <p class="text-[10px] text-gray-500 font-medium">Kelompok Tani, BUMDes</p>
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <h3 class="text-2xl font-black text-gray-800 mb-6">Fasilitas Sarana</h3>
                     <div id="fasilitas-container" class="space-y-4">
                         <span class="text-sm font-bold text-gray-400 italic">Memuat data fasilitas...</span>
                     </div>
                 </div>
-
             </div>
         </section>
-
     </main>
 
     <footer class="w-full bg-white border-t border-gray-100 py-6 text-center z-10 mt-auto">
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-            &copy; 2026 Pemerintah Desa Puntik Luar
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">&copy; 2026 Pemerintah Desa Puntik Luar
         </p>
     </footer>
 
@@ -298,8 +304,7 @@
                 <div class="flex items-center gap-3">
                     <div
                         class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center text-lg shadow-sm">
-                        <i class="fa-solid fa-map-location-dot"></i>
-                    </div>
+                        <i class="fa-solid fa-map-location-dot"></i></div>
                     <div>
                         <h3 id="modal-fasilitas-title"
                             class="font-black text-blue-900 uppercase tracking-tight text-sm">Daftar Fasilitas</h3>
@@ -309,36 +314,25 @@
                     class="text-gray-400 hover:text-red-500 transition-colors bg-white w-8 h-8 rounded-full shadow-sm border border-gray-100 flex items-center justify-center"><i
                         class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="modal-fasilitas-list" class="p-2 overflow-y-auto flex-1 custom-scrollbar">
-            </div>
+            <div id="modal-fasilitas-list" class="p-2 overflow-y-auto flex-1 custom-scrollbar"></div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Animasi Reveal saat Scroll
             const reveals = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
             }, { threshold: 0.1 });
             reveals.forEach(reveal => { observer.observe(reveal); });
-
-            // Cek Status Login
             checkLoginStatus();
         });
 
-        function toggleUserMenu() {
-            document.getElementById('userMenu').classList.toggle('hidden');
-        }
+        function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('hidden'); }
 
         function checkLoginStatus() {
             const role = localStorage.getItem('userRole');
             const username = localStorage.getItem('username');
-
             if (role === 'USER' && username) {
                 document.getElementById('btn-login').classList.add('hidden');
                 document.getElementById('user-profile').classList.remove('hidden');
@@ -349,16 +343,21 @@
 
         function logout() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
-                localStorage.removeItem('userRole');
-                localStorage.removeItem('username');
-                window.location.reload();
+                localStorage.removeItem('userRole'); localStorage.removeItem('username'); window.location.reload();
             }
         }
 
-        // Logic Modal Detail Fasilitas
         window.closeModalFasilitasDetail = function () {
             document.getElementById('modalFasilitasDetail').classList.add('opacity-0', 'pointer-events-none');
             document.body.classList.remove('overflow-hidden');
+        }
+
+        // Script Switch Tema Warna!
+        function applyTheme(themeName) {
+            if (!themeName || themeName === 'blue') return;
+            document.querySelectorAll('[class*="blue-"]').forEach(el => {
+                el.className = el.className.replace(/blue-/g, themeName + '-');
+            });
         }
     </script>
 
@@ -376,15 +375,13 @@
             appId: "1:364750456093:web:751d5ebd6cc045b0d28df4",
             measurementId: "G-V1BF0S7J2D"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // 1. FETCH DATA PROFIL DESA & BATAS WILAYAH
+        // 1. FETCH DATA PROFIL DESA & JUMLAH PENDUDUK & TEMA WARNA
         onValue(ref(db, 'profil_desa'), (snapshot) => {
             const data = snapshot.val();
-            document.getElementById('txt-nama-desa1').innerText = data?.nama || '-';
-            document.getElementById('txt-nama-desa2').innerText = data?.nama || '-';
+            document.getElementById('txt-nama-desa').innerText = data?.nama || '-';
             document.getElementById('txt-kodepos').innerText = data?.kode_pos || '-';
             document.getElementById('txt-luas').innerText = data?.luas || '-';
             document.getElementById('txt-sejarah').innerText = data?.sejarah || '-';
@@ -393,10 +390,17 @@
             document.getElementById('txt-batas-selatan').innerText = data?.batas?.selatan || '-';
             document.getElementById('txt-batas-timur').innerText = data?.batas?.timur || '-';
             document.getElementById('txt-batas-barat').innerText = data?.batas?.barat || '-';
+
+            // Jumlah penduduk sekarang ngambil dari tabel profil_desa, bukan hitung manual lagi
+            const jmlPenduduk = data?.jumlah_penduduk ? Number(data.jumlah_penduduk) : 0;
+            document.getElementById('stat-total-penduduk').innerText = jmlPenduduk.toLocaleString('id-ID');
+
+            // Set Warna Tema Otomatis
+            applyTheme(data?.tema_warna || 'blue');
         });
 
-        // 2. FETCH DATA FASILITAS (AUTO DETECT & GROUPING)
-        let fasilitasGrouped = {}; // Global variabel utk nampung data saat pop-up dibuka
+        // 2. FETCH DATA FASILITAS
+        let fasilitasGrouped = {};
         window.fasilitasGroupedGlobal = fasilitasGrouped;
 
         onValue(ref(db, 'fasilitas'), (snapshot) => {
@@ -410,19 +414,15 @@
                 return;
             }
 
-            // Grouping by jenis
             for (let key in data) {
                 let item = data[key];
                 let jenis = item.jenis || 'Lainnya';
-                if (!fasilitasGrouped[jenis]) {
-                    fasilitasGrouped[jenis] = [];
-                }
+                if (!fasilitasGrouped[jenis]) fasilitasGrouped[jenis] = [];
                 fasilitasGrouped[jenis].push(item);
             }
 
             window.fasilitasGroupedGlobal = fasilitasGrouped;
 
-            // Render Card Dinamis
             const typeThemes = {
                 'Pendidikan': { bg: 'bg-blue-50', text: 'text-blue-600', icon: 'fa-school' },
                 'Kesehatan': { bg: 'bg-rose-50', text: 'text-rose-600', icon: 'fa-house-medical' },
@@ -434,12 +434,10 @@
                 let count = fasilitasGrouped[jenis].length;
                 let theme = typeThemes[jenis] || typeThemes['default'];
 
-                let cardHtml = `
+                container.innerHTML += `
                     <div onclick="openFasilitasDetail('${jenis}')" class="glass-card p-4 rounded-2xl flex items-center justify-between cursor-pointer hover:scale-[1.02] hover:bg-blue-50/20 transition-all shadow-sm hover:shadow-md border border-gray-100 hover:border-blue-200 group">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full ${theme.bg} ${theme.text} flex items-center justify-center text-lg shadow-sm">
-                                <i class="fa-solid ${theme.icon}"></i>
-                            </div>
+                            <div class="w-12 h-12 rounded-full ${theme.bg} ${theme.text} flex items-center justify-center text-lg shadow-sm"><i class="fa-solid ${theme.icon}"></i></div>
                             <div>
                                 <h4 class="text-sm font-black text-gray-800 group-hover:text-blue-700 transition-colors">Fasilitas ${jenis}</h4>
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${count} Sarana Tersedia</p>
@@ -450,15 +448,12 @@
                         </div>
                     </div>
                 `;
-                container.innerHTML += cardHtml;
             }
         });
 
-        // Logika Eksekusi Pop-up via Global Function
         window.openFasilitasDetail = function (jenis) {
             const list = window.fasilitasGroupedGlobal[jenis] || [];
             document.getElementById('modal-fasilitas-title').innerText = `Daftar Fasilitas ${jenis}`;
-
             const listContainer = document.getElementById('modal-fasilitas-list');
             listContainer.innerHTML = '';
 
@@ -466,9 +461,7 @@
                 listContainer.innerHTML += `
                     <div class="px-6 py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
                         <div class="flex gap-4 items-start">
-                            <div class="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5">
-                                ${index + 1}
-                            </div>
+                            <div class="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5">${index + 1}</div>
                             <div>
                                 <h5 class="text-sm font-black text-gray-800 uppercase tracking-tight">${item.nama}</h5>
                                 <p class="text-xs font-medium text-gray-500 mt-1.5 leading-relaxed"><i class="fa-solid fa-map-pin text-gray-400 mr-1.5"></i> ${item.alamat}</p>
@@ -477,21 +470,18 @@
                     </div>
                 `;
             });
-
             document.getElementById('modalFasilitasDetail').classList.remove('opacity-0', 'pointer-events-none');
             document.body.classList.add('overflow-hidden');
         }
 
-        // 3. FETCH DATA STATISTIK PENDUDUK (TETAP DIPERTAHANKAN)
+        // 3. FETCH PERSENTASE DEMOGRAFI (Tanpa Hitung Total Penduduk)
         function calculateAge(birthDateString) {
             if (!birthDateString) return 0;
             const today = new Date();
             const birthDate = new Date(birthDateString);
             let age = today.getFullYear() - birthDate.getFullYear();
             const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
             return age >= 0 ? age : 0;
         }
 
@@ -499,15 +489,12 @@
             const data = snapshot.val();
             const listKK = data ? Object.values(data) : [];
 
-            let totalPenduduk = 0;
             let countL = 0, countP = 0;
             let usiaAnak = 0, usiaProduktif = 0, usiaLansia = 0;
-            const eduCounts = {};
-            const jobCounts = {};
+            const eduCounts = {}, jobCounts = {};
             let totalEvaluatedMembers = 0;
 
             listKK.forEach(kk => {
-                totalPenduduk += parseInt(kk.tanggungan || 0);
                 if (kk.anggota && Array.isArray(kk.anggota)) {
                     kk.anggota.forEach(p => {
                         totalEvaluatedMembers++;
@@ -524,8 +511,6 @@
                     });
                 }
             });
-
-            document.getElementById('stat-total-penduduk').innerText = totalPenduduk.toLocaleString('id-ID');
 
             if (totalEvaluatedMembers > 0) {
                 const pctL = Math.round((countL / totalEvaluatedMembers) * 100);
@@ -555,9 +540,9 @@
 
                 const sortedJobs = Object.entries(jobCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
                 const jobThemes = [
-                    { bg: 'bg-emerald-50', text: 'text-emerald-600', icon: 'fa-seedling', desc: 'Sektor mayoritas warga' },
-                    { bg: 'bg-amber-50', text: 'text-amber-600', icon: 'fa-store', desc: 'Pekerjaan terbanyak kedua' },
-                    { bg: 'bg-purple-50', text: 'text-purple-600', icon: 'fa-briefcase', desc: 'Pekerjaan terbanyak ketiga' }
+                    { bg: 'bg-emerald-50', text: 'text-emerald-600', desc: 'Sektor mayoritas warga' },
+                    { bg: 'bg-amber-50', text: 'text-amber-600', desc: 'Pekerjaan terbanyak kedua' },
+                    { bg: 'bg-purple-50', text: 'text-purple-600', desc: 'Pekerjaan terbanyak ketiga' }
                 ];
 
                 let jobHtml = '';
@@ -566,10 +551,7 @@
                     const theme = jobThemes[index] || jobThemes[2];
                     jobHtml += `
                         <div class="flex items-center gap-3">
-                            <div class="flex-grow">
-                                <p class="text-xs font-bold text-gray-700">${job} (${pct}%)</p>
-                                <p class="text-[10px] text-gray-400">${theme.desc}</p>
-                            </div>
+                            <div class="flex-grow"><p class="text-xs font-bold text-gray-700">${job} (${pct}%)</p><p class="text-[10px] text-gray-400">${theme.desc}</p></div>
                         </div>
                     `;
                 });

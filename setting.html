@@ -31,7 +31,6 @@
             }
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -50,16 +49,13 @@
             background: #94a3b8;
         }
 
-        /* Active Sidebar Link */
-        .sidebar-link.active {
-            background-color: #eff6ff;
-            color: #2563eb;
-            border-right: 4px solid #2563eb;
-            font-weight: 800;
-        }
-
         .sidebar-link {
             transition: all 0.2s ease-in-out;
+        }
+
+        input:invalid:not(:placeholder-shown) {
+            border-color: #f87171;
+            background-color: #fef2f2;
         }
     </style>
 </head>
@@ -95,7 +91,6 @@
 
         <div class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Main Menu</p>
-
             <a href="index-admin.html"
                 class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
                 <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
@@ -108,10 +103,15 @@
                 class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
                 <i class="fa-solid fa-building w-5 text-center"></i> Fasilitas Desa
             </a>
+            <a href="sosbud.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-people-group w-5 text-center"></i> Sosial Budaya
+            </a>
 
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2 mt-4">Sistem</p>
+
             <a href="setting.html"
-                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600">
+                class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold bg-blue-50 text-blue-600 border-r-4 border-blue-600">
                 <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan Desa
             </a>
         </div>
@@ -144,7 +144,8 @@
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
                     <h4
                         class="text-sm font-black text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-3 mb-6">
-                        <i class="fa-solid fa-id-card mr-2"></i> Identitas desa</h4>
+                        <i class="fa-solid fa-id-card mr-2"></i> Identitas & Konfigurasi Sistem
+                    </h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1">
                             <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nama Desa</label>
@@ -152,17 +153,38 @@
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-bold text-gray-800">
                         </div>
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Kode Pos</label>
-                            <input type="text" id="input_kodepos" required pattern="\d{5}"
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Kode Pos (Hanya
+                                Angka)</label>
+                            <input type="number" id="input_kodepos" required placeholder="Contoh: 70563"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-mono font-bold text-gray-800">
                         </div>
-                        <div class="md:col-span-2 space-y-1">
+                        <div class="space-y-1">
                             <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Luas Wilayah</label>
                             <input type="text" id="input_luas" required placeholder="Contoh: ± 1.250 Hektar"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-medium">
                         </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Jumlah Penduduk (Hanya
+                                Angka)</label>
+                            <input type="number" id="input_penduduk" required min="0" placeholder="Contoh: 2500"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-bold text-gray-800">
+                        </div>
                         <div class="md:col-span-2 space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Deskripsi singkat</label>
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Tema Warna
+                                Aplikasi</label>
+                            <select id="input_tema_warna"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none font-bold text-gray-800 cursor-pointer">
+                                <option value="blue">Biru (Default)</option>
+                                <option value="emerald">Zamrud (Hijau)</option>
+                                <option value="indigo">Nila (Indigo)</option>
+                                <option value="rose">Mawar (Merah Muda)</option>
+                                <option value="amber">Ambar (Kuning)</option>
+                                <option value="purple">Ungu (Purple)</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Deskripsi singkat /
+                                Sejarah</label>
                             <textarea id="input_sejarah" required rows="4"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none resize-none leading-relaxed text-gray-700"></textarea>
                         </div>
@@ -172,26 +194,27 @@
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm">
                     <h4
                         class="text-sm font-black text-blue-600 uppercase tracking-widest border-b border-gray-100 pb-3 mb-6">
-                        <i class="fa-solid fa-map-location-dot mr-2"></i> Batas Wilayah Geografis</h4>
+                        <i class="fa-solid fa-map-location-dot mr-2"></i> Batas Wilayah Geografis
+                    </h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Utara</label>
-                            <input type="text" id="batas_utara" required
+                        <div class="space-y-1"><label
+                                class="text-[10px] font-bold text-gray-400 uppercase ml-1">Utara</label><input
+                                type="text" id="batas_utara" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Selatan</label>
-                            <input type="text" id="batas_selatan" required
+                        <div class="space-y-1"><label
+                                class="text-[10px] font-bold text-gray-400 uppercase ml-1">Selatan</label><input
+                                type="text" id="batas_selatan" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Timur</label>
-                            <input type="text" id="batas_timur" required
+                        <div class="space-y-1"><label
+                                class="text-[10px] font-bold text-gray-400 uppercase ml-1">Timur</label><input
+                                type="text" id="batas_timur" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Barat</label>
-                            <input type="text" id="batas_barat" required
+                        <div class="space-y-1"><label
+                                class="text-[10px] font-bold text-gray-400 uppercase ml-1">Barat</label><input
+                                type="text" id="batas_barat" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-600 outline-none">
                         </div>
                     </div>
@@ -208,7 +231,6 @@
     </main>
 
     <script>
-        // Logika Sidebar Toggle
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
 
@@ -223,7 +245,6 @@
             }
         }
 
-        // Tampilkan Info Admin
         document.addEventListener('DOMContentLoaded', () => {
             const savedUsername = localStorage.getItem('username');
             if (savedUsername) {
@@ -232,19 +253,24 @@
             }
         });
 
-        // Logout
         function logout() {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
-                localStorage.removeItem('userRole');
-                localStorage.removeItem('username');
-                window.location.href = 'index.html';
+                localStorage.removeItem('userRole'); localStorage.removeItem('username'); window.location.href = 'index.html';
             }
+        }
+
+        // Auto-Theme Switcher (Lebih simpel & akurat!)
+        function applyTheme(themeName) {
+            if (!themeName || themeName === 'blue') return;
+            document.querySelectorAll('[class*="blue-"]').forEach(el => {
+                el.className = el.className.replace(/blue-/g, themeName + '-');
+            });
         }
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
@@ -259,16 +285,17 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
-        // Ambil Data Profil Desa saat halaman dimuat
         const profilRef = ref(db, 'profil_desa');
 
-        get(profilRef).then((snapshot) => {
+        // Fetch data untuk isi Form dan terapkan tema langsung
+        onValue(profilRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 document.getElementById('input_nama_desa').value = data.nama || '';
                 document.getElementById('input_kodepos').value = data.kode_pos || '';
                 document.getElementById('input_luas').value = data.luas || '';
+                document.getElementById('input_penduduk').value = data.jumlah_penduduk || '';
+                document.getElementById('input_tema_warna').value = data.tema_warna || 'blue';
                 document.getElementById('input_sejarah').value = data.sejarah || '';
 
                 if (data.batas) {
@@ -277,17 +304,17 @@
                     document.getElementById('batas_timur').value = data.batas.timur || '';
                     document.getElementById('batas_barat').value = data.batas.barat || '';
                 }
-            } else {
-                console.log("Belum ada data profil desa di database, silakan isi form.");
+
+                // Aplikasikan tema warna seketika!
+                applyTheme(data.tema_warna || 'blue');
             }
-        }).catch((error) => {
-            console.error("Gagal mengambil data profil:", error);
         });
 
-        // Event Submit Form Update Profil
+        // Simpan Data
         document.getElementById('formSettingDesa').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btnSimpan = document.getElementById('btnSimpan');
+            const originalText = btnSimpan.innerHTML;
             btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
             btnSimpan.disabled = true;
 
@@ -295,6 +322,8 @@
                 nama: document.getElementById('input_nama_desa').value,
                 kode_pos: document.getElementById('input_kodepos').value,
                 luas: document.getElementById('input_luas').value,
+                jumlah_penduduk: document.getElementById('input_penduduk').value,
+                tema_warna: document.getElementById('input_tema_warna').value,
                 sejarah: document.getElementById('input_sejarah').value,
                 batas: {
                     utara: document.getElementById('batas_utara').value,
@@ -305,13 +334,13 @@
             };
 
             try {
-                // Gunakan set() untuk menimpa node 'profil_desa' dengan data baru
                 await set(profilRef, profilData);
-                alert("Pengaturan Profil Desa berhasil disimpan ke Server!");
+                alert("Pengaturan berhasil disimpan! Tema baru akan langsung diterapkan.");
+                window.location.reload();
             } catch (error) {
                 alert("Gagal menyimpan data: " + error.message);
             } finally {
-                btnSimpan.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Desa';
+                btnSimpan.innerHTML = originalText;
                 btnSimpan.disabled = false;
             }
         });

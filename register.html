@@ -112,9 +112,19 @@
         </div>
     </div>
 
+    <script>
+        // Script Switch Tema Warna
+        window.applyTheme = function (themeName) {
+            if (!themeName || themeName === 'blue') return;
+            document.querySelectorAll('[class*="blue-"]').forEach(el => {
+                el.className = el.className.replace(/blue-/g, themeName + '-');
+            });
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getDatabase, ref, push, set, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getDatabase, ref, push, set, query, orderByChild, equalTo, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBVS2Yv7oSVYOngcbhz4Ky7KM7fll3jWzM",
@@ -130,6 +140,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Fetch Tema Warna
+        onValue(ref(db, 'profil_desa'), (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.tema_warna) {
+                window.applyTheme(data.tema_warna);
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('register-form');
             const inputUsername = document.getElementById('reg-username');
@@ -142,6 +160,7 @@
                 errorMessage.textContent = msg;
                 errorContainer.classList.remove('hidden');
                 btnRegister.disabled = false;
+                btnRegister.innerHTML = 'Daftar Sekarang';
             }
 
             inputPassword.addEventListener('input', () => {
@@ -159,8 +178,8 @@
                 const usernameVal = inputUsername.value.trim();
                 const passwordVal = inputPassword.value;
                 btnRegister.disabled = true;
+                btnRegister.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
 
-                // Cek apakah username sudah ada
                 const usersRef = ref(db, 'users');
                 const userQuery = query(usersRef, orderByChild('username'), equalTo(usernameVal));
 
@@ -168,14 +187,16 @@
                     if (snapshot.exists()) {
                         showError("Username sudah digunakan. Pilih yang lain.");
                     } else {
-                        // Jika kosong, masukkan data baru dengan role USER
                         const newUserRef = push(usersRef);
                         set(newUserRef, {
                             username: usernameVal,
                             password: passwordVal,
                             role: "USER"
                         }).then(() => {
-                            window.location.href = 'index.html'; // Lempar ke beranda publik
+                            // Langsung login-kan dan lempar ke beranda
+                            localStorage.setItem('username', usernameVal);
+                            localStorage.setItem('userRole', 'USER');
+                            window.location.href = 'index.html';
                         }).catch((error) => {
                             showError("Gagal mendaftar. Cek koneksi Anda.");
                         });

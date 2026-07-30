@@ -109,6 +109,10 @@
                 class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
                 <i class="fa-solid fa-building w-5 text-center"></i> Fasilitas Desa
             </a>
+            <a href="sosbud.html"
+                class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-600">
+                <i class="fa-solid fa-people-group w-5 text-center"></i> Sosial Budaya
+            </a>
 
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2 mt-4">Sistem</p>
             <a href="setting.html"
@@ -248,6 +252,20 @@
                 window.location.href = 'index.html';
             }
         }
+
+        // Script Auto-Theme Warna
+        function applyTheme(themeName) {
+            if (!themeName || themeName === 'blue') return;
+            document.querySelectorAll('[class*="blue-"]').forEach(el => {
+                el.className = el.className.replace(/blue-/g, themeName + '-');
+            });
+
+            // Mengubah style khusus sidebar link active jika ada elemen internal
+            document.querySelectorAll('.sidebar-link.active').forEach(el => {
+                el.style.color = `var(--tw-color-${themeName}-600)`;
+                el.style.borderRightColor = `var(--tw-color-${themeName}-600)`;
+            });
+        }
     </script>
 
     <script type="module">
@@ -267,6 +285,14 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+
+        // Fetch Tema Warna dari Profil Desa
+        onValue(ref(db, 'profil_desa'), (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.tema_warna) {
+                applyTheme(data.tema_warna);
+            }
+        });
 
         // Chart Instance Variables
         let chartUsiaInstance = null;
@@ -290,7 +316,7 @@
             return age >= 0 ? age : 0;
         }
 
-        // Realtime Data Listener
+        // Realtime Data Listener (TETAP MENJUMLAHKAN DATA ASLI)
         onValue(ref(db, 'kartu_keluarga'), (snapshot) => {
             const data = snapshot.val();
             const listKK = data ? Object.values(data) : [];
@@ -311,7 +337,7 @@
                 if (kk.rt) setRT.add(kk.rt.toString().trim());
                 if (kk.rw) setRW.add(kk.rw.toString().trim());
 
-                // Total Tanggungan
+                // Total Tanggungan (Menghitung Penduduk Real-time dari Database Kependudukan)
                 totalPendudukCount += parseInt(kk.tanggungan || 0);
 
                 if (kk.anggota && Array.isArray(kk.anggota)) {
@@ -416,8 +442,6 @@
 
         function renderChartPendidikan(counts) {
             if (chartPendidikanInstance) chartPendidikanInstance.destroy();
-
-            // Filter out 0 counts
             const filteredLabels = Object.keys(counts).filter(k => counts[k] > 0);
             const filteredData = filteredLabels.map(k => counts[k]);
 
@@ -447,8 +471,6 @@
 
         function renderChartPekerjaan(counts) {
             if (chartPekerjaanInstance) chartPekerjaanInstance.destroy();
-
-            // Filter out 0 counts
             const filteredLabels = Object.keys(counts).filter(k => counts[k] > 0);
             const filteredData = filteredLabels.map(k => counts[k]);
 

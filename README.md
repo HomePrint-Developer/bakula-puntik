@@ -87,7 +87,7 @@ Pastikan aturan keamanan (Security Rules) pada Firebase Realtime Database Anda d
 
 ## 💻 Cara Menjalankan Proyek
 1. **Clone repository ini atau unduh seluruh file ke komputer Anda:**
-   - git clone [https://github.com/username/bakula-puntik.git](https://github.com/username/bakula-puntik.git)
+```text git clone [https://github.com/username/bakula-puntik.git](https://github.com/username/bakula-puntik.git) ```
 2. **Buka folder proyek di teks editor pilihan Anda (seperti VS Code).**
 3. **Jalankan server lokal menggunakan ekstensi Live Server di VS Code atau buka langsung file index.html di browser web modern Anda.**
 4. **Pastikan perangkat terhubung ke internet agar koneksi ke Firebase Realtime Database berjalan dengan baik.**
